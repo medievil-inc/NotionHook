@@ -1,4 +1,4 @@
-name: 'NotionHook'
+name: 'notion-action'
 description: 'Sync your commits to Notion'
 branding:
   icon: 'check-circle'  
@@ -7,10 +7,6 @@ inputs:
   notion_secret:
     description: 'Notion Secret retrieved from My Integrations on notion.so/my-integrations'
     required: true
-  commit_url:
-    description: "Name of Database column for commit url"
-    required: true
-    default: "Url"
 runs:
   using: 'node16'
   main: 'dist/index.js'

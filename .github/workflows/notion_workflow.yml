@@ -1,0 +1,12 @@
+on: [push]
+
+jobs:
+  notion_job:
+    runs-on: ubuntu-latest
+    name: Sync your commits to Notion job
+    steps:
+      - name: Send commits information step
+        id: notion
+        uses: medievil-inc/notion-action@1.1
+        with:
+          notion_secret: ${{ secrets.NOTION_SECRET }}
