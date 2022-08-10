@@ -9551,7 +9551,6 @@ async function createComment(notion, commit) {
             ]
         }
     )
-    .then(response => response.text())
     .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(result))
     .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
 }
