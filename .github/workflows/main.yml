@@ -15,6 +15,6 @@ jobs:
         run: npm ci
       - name: Connect to Notion step
         id: notion
-        uses: medievil-inc/NotionHook
+        uses: medievil-inc/NotionHook@1.1
         with:
           notion_secret: ${{ secrets.NOTION_SECRET }}
