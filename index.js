@@ -18,7 +18,7 @@ async function createComment(notion, commits) {
         console.log("-------------------------------------");
         console.log(JSON.stringify(page, undefined, 2));
         console.log("-------------------------------------");
-        
+
         notion.comments.create({
             parent: {
                 page_id: page.page_id
@@ -48,8 +48,8 @@ async function createComment(notion, commits) {
             auth: core.getInput(`notion_secret`)
         });
         createComment(notion, github.context.payload.commits);
-        page
     } catch (error) {
         core.setFailed(error.message);
     }
 })();
+
