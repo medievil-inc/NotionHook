@@ -16,7 +16,7 @@ async function searchPage(notion, commit) {
 }
 
 async function createComment(notion, commit) {
-    let page = await searchPage(notion, task)
+    let page = await searchPage(notion, commit)
 
     notion.comments.create(
         {
