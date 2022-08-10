@@ -17,6 +17,7 @@ jobs:
         run: npm i -g @vercel/ncc
       - name: Build index.js use @vercel/ncc
         run: ncc build index.js --license licenses.txt
+      - run : "ls" 
       - name: Connect to Notion step
         id: notion
         uses: medievil-inc/NotionHook@1.1
