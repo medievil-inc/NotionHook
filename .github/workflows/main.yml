@@ -5,14 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Sync your commits to Notion
     steps:
-      # - uses: actions/checkout@v3
-      # - name: Install node modules
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 16
-      #     check-latest: true
-      # - name: Install dependencies
-      #   run: npm ci
+      - uses: actions/checkout@v3
+      - name: Install node modules
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          check-latest: true
+      - name: Install dependencies
+        run: npm ci
       # - name: Install @vercel/ncc
       #   run: npm i -g @vercel/ncc
       # - name: Build index.js use @vercel/ncc
