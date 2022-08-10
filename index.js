@@ -19,9 +19,9 @@ async function createComment(notion, commit) {
     let page = await searchPage(notion, commit)
 
     console.log("------------------------------------------");
-    console.log(JSON.stringify(commit), undefined, 2);
+    console.log(JSON.stringify(commit, null, 4));
     console.log("------------------------------------------");
-    
+
     notion.comments.create(
         {
             parent: {
@@ -36,7 +36,7 @@ async function createComment(notion, commit) {
             ]
         }
     )
-    .then(result => core.setOutput("Output", JSON.stringify(result), undefined, 2))
+    .then(result => core.notice(JSON.stringify(result)))
     .catch(error => core.setFailed(error.message));
 }
 

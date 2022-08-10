@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Sync your commits to Notion job
     steps:
-      - name: Send commits information step
+      - name: Send commits info step
         id: notion
         uses: medievil-inc/notion-hook@1.1
         with:

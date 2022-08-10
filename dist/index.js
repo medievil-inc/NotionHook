@@ -9538,9 +9538,9 @@ async function createComment(notion, commit) {
     let page = await searchPage(notion, commit)
 
     console.log("------------------------------------------");
-    console.log(JSON.stringify(commit), undefined, 2);
+    console.log(JSON.stringify(commit, null, 4));
     console.log("------------------------------------------");
-    
+
     notion.comments.create(
         {
             parent: {
@@ -9555,7 +9555,7 @@ async function createComment(notion, commit) {
             ]
         }
     )
-    .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("Output", JSON.stringify(result), undefined, 2))
+    .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.notice(JSON.stringify(result)))
     .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
 }
 
