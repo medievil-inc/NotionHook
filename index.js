@@ -2,41 +2,39 @@ import core from "@actions/core"
 import github from "@actions/github"
 import { Client } from "@notionhq/client"
 
-async function createComment(notion, commits) {
-    commits.forEach((commit) => {
+async function searchPage(notion, commit) {
+    const query = commit.message.split(" ")[0];
 
-        const task = commit.message.substring(commit.message.indexOf("atnt:") + 6);
+    const response = await notion.search({
+        query: query,
+        filter: {
+            property: "object",
+            value: "page"
+        }
+    });
+    return response.results[0];
+}
 
-        // search for a page in the Notion database "Tasks" given the task name
-        const page = notion.search({
-            query: task //,
-            // filter: { 
-            //     value: "page"
-            // }
-        })[0];
+async function createComment(notion, commit) {
+    let page = await searchPage(notion, task)
 
-        console.log("-------------------------------------");
-        console.log(JSON.stringify(page, undefined, 2));
-        console.log("-------------------------------------");
-
-        notion.comments.create({
+    notion.comments.create(
+        {
             parent: {
-                page_id: page.parent.page_id
+                page_id: page.id
             },
             rich_text: [
                 {
-                    [core.getInput("commit_url")]: {
-                        text: {
-                            content: commit.url
-                        }
+                    text: {
+                        content: commit.url
                     }
                 }
             ]
-        })
-        .then(response => response.text())
-        .then(result => core.info(result))
-        .catch(error => core.setFailed(error.message));
-    });
+        }
+    )
+    .then(response => response.text())
+    .then(result => core.info(result))
+    .catch(error => core.setFailed(error.message));
 }
 
 (async () => {
@@ -47,7 +45,16 @@ async function createComment(notion, commits) {
         const notion = new Client({
             auth: core.getInput(`notion_secret`)
         });
-        createComment(notion, github.context.payload.commits);
+
+        const commits = github.context.payload.commits;
+
+        if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
+            commits.forEach((commit) => {
+                createComment(notion, commit);
+            });
+        } else { 
+            createComment(notion, github.context.payload.head_commit);
+        }
     } catch (error) {
         core.setFailed(error.message);
     }

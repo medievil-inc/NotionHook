@@ -9521,41 +9521,39 @@ var __webpack_exports__ = {};
 
 
 
-async function createComment(notion, commits) {
-    commits.forEach((commit) => {
+async function searchPage(notion, commit) {
+    const query = commit.message.split(" ")[0];
 
-        const task = commit.message.substring(commit.message.indexOf("atnt:") + 6);
+    const response = await notion.search({
+        query: query,
+        filter: {
+            property: "object",
+            value: "page"
+        }
+    });
+    return response.results[0];
+}
 
-        // search for a page in the Notion database "Tasks" given the task name
-        const page = notion.search({
-            query: task //,
-            // filter: { 
-            //     value: "page"
-            // }
-        })[0];
+async function createComment(notion, commit) {
+    let page = await searchPage(notion, task)
 
-        console.log("-------------------------------------");
-        console.log(JSON.stringify(page, undefined, 2));
-        console.log("-------------------------------------");
-
-        notion.comments.create({
+    notion.comments.create(
+        {
             parent: {
-                page_id: page.parent.page_id
+                page_id: page.id
             },
             rich_text: [
                 {
-                    [_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("commit_url")]: {
-                        text: {
-                            content: commit.url
-                        }
+                    text: {
+                        content: commit.url
                     }
                 }
             ]
-        })
-        .then(response => response.text())
-        .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(result))
-        .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
-    });
+        }
+    )
+    .then(response => response.text())
+    .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(result))
+    .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
 }
 
 (async () => {
@@ -9566,7 +9564,16 @@ async function createComment(notion, commits) {
         const notion = new _notionhq_client__WEBPACK_IMPORTED_MODULE_2__/* .Client */ .KU({
             auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`)
         });
-        createComment(notion, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits);
+
+        const commits = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits;
+
+        if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
+            commits.forEach((commit) => {
+                createComment(notion, commit);
+            });
+        } else { 
+            createComment(notion, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.head_commit);
+        }
     } catch (error) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
     }
