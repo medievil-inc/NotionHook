@@ -52,7 +52,7 @@ async function createComment(notion, commits) {
         const notion = new Client({ 
             auth: core.getInput(`notion_secret`) 
         });
-        createComment(notion, github.context.payload.commits);
+        // createComment(notion, github.context.payload.commits);
     } catch (error) {
         core.setFailed(error.message);
     }
