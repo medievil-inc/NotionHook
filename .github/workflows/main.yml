@@ -5,9 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Sync your commits to Notion
     steps:
+      - uses: actions/checkout@v3
+      - name: Install node modules
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install
       - name: Connect to Notion step
         id: notion
-        uses: medievil-inc/NotionHook@1.1
+        uses: medievil-inc/NotionHook
         with:
           notion_secret: ${{ secrets.NOTION_SECRET }}
-          notion_database: ${{ secrets.NOTION_DATABASE }}

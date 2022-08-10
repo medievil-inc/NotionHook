@@ -1,14 +1,9 @@
 import { Client } from "@notionhq/client";
-import "dotenv/config";
 
 const core = require("@actions/core");
 const github = require("@actions/github");
-const { GitHub } = require("@actions/github/lib/utils");
 
-const databaseId = process.env.NOTION_DATABASE_ID;
-const notionVersion = "2022-06-28"
-
-async function createCommit(notion, commits) {
+async function createComment(notion, commits) {
     commits.forEach((commit) => {
 
         const task = commit.message.substring(commit.message.indexOf("atnt:") + 6);
@@ -17,12 +12,11 @@ async function createCommit(notion, commits) {
         const page = notion.pages.filter(
             (page) => page.properties.title === task
         )[0];
-
+        
         var headers = new Headers();
-        headers.append("Notion-Version", notionVersion);
+        headers.append("Notion-Version", "2022-06-28");
         headers.append("Authorization", `Bearer ${core.getInput("notion_secret")}`);
         headers.append("Content-Type", `application/json`);
-
 
         var raw = JSON.stringify({
             "parent": {
@@ -48,15 +42,17 @@ async function createCommit(notion, commits) {
 
         fetch("https://api.notion.com/v1/comments", requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+            .then(result => core.info(result))
+            .catch(error => core.setFailed(error.message));
     });
 }
 
 (async () => {
     try {
-        const notion = new Client({ auth: core.getInput(`notion_secret`) });
-        createCommit(notion, github.context.payload.commits);
+        const notion = new Client({ 
+            auth: core.getInput(`notion_secret`) 
+        });
+        createComment(notion, github.context.payload.commits);
     } catch (error) {
         core.setFailed(error.message);
     }
