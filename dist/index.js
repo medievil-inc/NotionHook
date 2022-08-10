@@ -1992,10 +1992,10 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.getBlock.path(args),
-                    method: api_endpoints_1.getBlock.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.getBlock.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.getBlock.bodyParams),
+                    path: api_endpoints_1.blocksRetrieve.path(args),
+                    method: api_endpoints_1.blocksRetrieve.method,
+                    query: helpers_1.pick(args, api_endpoints_1.blocksRetrieve.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.blocksRetrieve.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2004,22 +2004,10 @@ class Client {
              */
             update: (args) => {
                 return this.request({
-                    path: api_endpoints_1.updateBlock.path(args),
-                    method: api_endpoints_1.updateBlock.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.updateBlock.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.updateBlock.bodyParams),
-                    auth: args === null || args === void 0 ? void 0 : args.auth,
-                });
-            },
-            /**
-             * Delete block
-             */
-            delete: (args) => {
-                return this.request({
-                    path: api_endpoints_1.deleteBlock.path(args),
-                    method: api_endpoints_1.deleteBlock.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.deleteBlock.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.deleteBlock.bodyParams),
+                    path: api_endpoints_1.blocksUpdate.path(args),
+                    method: api_endpoints_1.blocksUpdate.method,
+                    query: helpers_1.pick(args, api_endpoints_1.blocksUpdate.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.blocksUpdate.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2029,10 +2017,10 @@ class Client {
                  */
                 append: (args) => {
                     return this.request({
-                        path: api_endpoints_1.appendBlockChildren.path(args),
-                        method: api_endpoints_1.appendBlockChildren.method,
-                        query: (0, helpers_1.pick)(args, api_endpoints_1.appendBlockChildren.queryParams),
-                        body: (0, helpers_1.pick)(args, api_endpoints_1.appendBlockChildren.bodyParams),
+                        path: api_endpoints_1.blocksChildrenAppend.path(args),
+                        method: api_endpoints_1.blocksChildrenAppend.method,
+                        query: helpers_1.pick(args, api_endpoints_1.blocksChildrenAppend.queryParams),
+                        body: helpers_1.pick(args, api_endpoints_1.blocksChildrenAppend.bodyParams),
                         auth: args === null || args === void 0 ? void 0 : args.auth,
                     });
                 },
@@ -2041,10 +2029,10 @@ class Client {
                  */
                 list: (args) => {
                     return this.request({
-                        path: api_endpoints_1.listBlockChildren.path(args),
-                        method: api_endpoints_1.listBlockChildren.method,
-                        query: (0, helpers_1.pick)(args, api_endpoints_1.listBlockChildren.queryParams),
-                        body: (0, helpers_1.pick)(args, api_endpoints_1.listBlockChildren.bodyParams),
+                        path: api_endpoints_1.blocksChildrenList.path(args),
+                        method: api_endpoints_1.blocksChildrenList.method,
+                        query: helpers_1.pick(args, api_endpoints_1.blocksChildrenList.queryParams),
+                        body: helpers_1.pick(args, api_endpoints_1.blocksChildrenList.bodyParams),
                         auth: args === null || args === void 0 ? void 0 : args.auth,
                     });
                 },
@@ -2056,12 +2044,12 @@ class Client {
              *
              * @deprecated Please use `search`
              */
-            list: (args) => {
+            list: (args = {}) => {
                 return this.request({
-                    path: api_endpoints_1.listDatabases.path(),
-                    method: api_endpoints_1.listDatabases.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.listDatabases.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.listDatabases.bodyParams),
+                    path: api_endpoints_1.databasesList.path(),
+                    method: api_endpoints_1.databasesList.method,
+                    query: helpers_1.pick(args, api_endpoints_1.databasesList.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.databasesList.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2070,10 +2058,10 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.getDatabase.path(args),
-                    method: api_endpoints_1.getDatabase.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.getDatabase.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.getDatabase.bodyParams),
+                    path: api_endpoints_1.databasesRetrieve.path(args),
+                    method: api_endpoints_1.databasesRetrieve.method,
+                    query: helpers_1.pick(args, api_endpoints_1.databasesRetrieve.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.databasesRetrieve.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2082,10 +2070,10 @@ class Client {
              */
             query: (args) => {
                 return this.request({
-                    path: api_endpoints_1.queryDatabase.path(args),
-                    method: api_endpoints_1.queryDatabase.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.queryDatabase.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.queryDatabase.bodyParams),
+                    path: api_endpoints_1.databasesQuery.path(args),
+                    method: api_endpoints_1.databasesQuery.method,
+                    query: helpers_1.pick(args, api_endpoints_1.databasesQuery.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.databasesQuery.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2094,22 +2082,10 @@ class Client {
              */
             create: (args) => {
                 return this.request({
-                    path: api_endpoints_1.createDatabase.path(),
-                    method: api_endpoints_1.createDatabase.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.createDatabase.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.createDatabase.bodyParams),
-                    auth: args === null || args === void 0 ? void 0 : args.auth,
-                });
-            },
-            /**
-             * Update a database
-             */
-            update: (args) => {
-                return this.request({
-                    path: api_endpoints_1.updateDatabase.path(args),
-                    method: api_endpoints_1.updateDatabase.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.updateDatabase.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.updateDatabase.bodyParams),
+                    path: api_endpoints_1.databasesCreate.path(),
+                    method: api_endpoints_1.databasesCreate.method,
+                    query: helpers_1.pick(args, api_endpoints_1.databasesCreate.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.databasesCreate.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2120,10 +2096,10 @@ class Client {
              */
             create: (args) => {
                 return this.request({
-                    path: api_endpoints_1.createPage.path(),
-                    method: api_endpoints_1.createPage.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.createPage.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.createPage.bodyParams),
+                    path: api_endpoints_1.pagesCreate.path(),
+                    method: api_endpoints_1.pagesCreate.method,
+                    query: helpers_1.pick(args, api_endpoints_1.pagesCreate.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.pagesCreate.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2132,10 +2108,10 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.getPage.path(args),
-                    method: api_endpoints_1.getPage.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.getPage.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.getPage.bodyParams),
+                    path: api_endpoints_1.pagesRetrieve.path(args),
+                    method: api_endpoints_1.pagesRetrieve.method,
+                    query: helpers_1.pick(args, api_endpoints_1.pagesRetrieve.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.pagesRetrieve.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2144,26 +2120,12 @@ class Client {
              */
             update: (args) => {
                 return this.request({
-                    path: api_endpoints_1.updatePage.path(args),
-                    method: api_endpoints_1.updatePage.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.updatePage.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.updatePage.bodyParams),
+                    path: api_endpoints_1.pagesUpdate.path(args),
+                    method: api_endpoints_1.pagesUpdate.method,
+                    query: helpers_1.pick(args, api_endpoints_1.pagesUpdate.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.pagesUpdate.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
-            },
-            properties: {
-                /**
-                 * Retrieve page property
-                 */
-                retrieve: (args) => {
-                    return this.request({
-                        path: api_endpoints_1.getPageProperty.path(args),
-                        method: api_endpoints_1.getPageProperty.method,
-                        query: (0, helpers_1.pick)(args, api_endpoints_1.getPageProperty.queryParams),
-                        body: (0, helpers_1.pick)(args, api_endpoints_1.getPageProperty.bodyParams),
-                        auth: args === null || args === void 0 ? void 0 : args.auth,
-                    });
-                },
             },
         };
         this.users = {
@@ -2172,41 +2134,29 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.getUser.path(args),
-                    method: api_endpoints_1.getUser.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.getUser.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.getUser.bodyParams),
+                    path: api_endpoints_1.usersRetrieve.path(args),
+                    method: api_endpoints_1.usersRetrieve.method,
+                    query: helpers_1.pick(args, api_endpoints_1.usersRetrieve.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.usersRetrieve.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
             /**
              * List all users
              */
-            list: (args) => {
+            list: (args = {}) => {
                 return this.request({
-                    path: api_endpoints_1.listUsers.path(),
-                    method: api_endpoints_1.listUsers.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.listUsers.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.listUsers.bodyParams),
-                    auth: args === null || args === void 0 ? void 0 : args.auth,
-                });
-            },
-            /**
-             * Get details about bot
-             */
-            me: (args) => {
-                return this.request({
-                    path: api_endpoints_1.getSelf.path(),
-                    method: api_endpoints_1.getSelf.method,
-                    query: (0, helpers_1.pick)(args, api_endpoints_1.getSelf.queryParams),
-                    body: (0, helpers_1.pick)(args, api_endpoints_1.getSelf.bodyParams),
+                    path: api_endpoints_1.usersList.path(),
+                    method: api_endpoints_1.usersList.method,
+                    query: helpers_1.pick(args, api_endpoints_1.usersList.queryParams),
+                    body: helpers_1.pick(args, api_endpoints_1.usersList.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
         };
         __classPrivateFieldSet(this, _Client_auth, options === null || options === void 0 ? void 0 : options.auth, "f");
         __classPrivateFieldSet(this, _Client_logLevel, (_a = options === null || options === void 0 ? void 0 : options.logLevel) !== null && _a !== void 0 ? _a : logging_1.LogLevel.WARN, "f");
-        __classPrivateFieldSet(this, _Client_logger, (_b = options === null || options === void 0 ? void 0 : options.logger) !== null && _b !== void 0 ? _b : (0, logging_1.makeConsoleLogger)(package_json_1.name), "f");
+        __classPrivateFieldSet(this, _Client_logger, (_b = options === null || options === void 0 ? void 0 : options.logger) !== null && _b !== void 0 ? _b : logging_1.makeConsoleLogger(package_json_1.name), "f");
         __classPrivateFieldSet(this, _Client_prefixUrl, ((_c = options === null || options === void 0 ? void 0 : options.baseUrl) !== null && _c !== void 0 ? _c : "https://api.notion.com") + "/v1/", "f");
         __classPrivateFieldSet(this, _Client_timeoutMs, (_d = options === null || options === void 0 ? void 0 : options.timeoutMs) !== null && _d !== void 0 ? _d : 60000, "f");
         __classPrivateFieldSet(this, _Client_notionVersion, (_e = options === null || options === void 0 ? void 0 : options.notionVersion) !== null && _e !== void 0 ? _e : Client.defaultNotionVersion, "f");
@@ -2254,14 +2204,14 @@ class Client {
             }), __classPrivateFieldGet(this, _Client_timeoutMs, "f"));
             const responseText = await response.text();
             if (!response.ok) {
-                throw (0, errors_1.buildRequestError)(response, responseText);
+                throw errors_1.buildRequestError(response, responseText);
             }
             const responseJson = JSON.parse(responseText);
             this.log(logging_1.LogLevel.INFO, `request success`, { method, path });
             return responseJson;
         }
         catch (error) {
-            if (!(0, errors_1.isNotionClientError)(error)) {
+            if (!errors_1.isNotionClientError(error)) {
                 throw error;
             }
             // Log the error if it's one of our known error types
@@ -2269,7 +2219,7 @@ class Client {
                 code: error.code,
                 message: error.message,
             });
-            if ((0, errors_1.isHTTPResponseError)(error)) {
+            if (errors_1.isHTTPResponseError(error)) {
                 // The response body may contain sensitive information so it is logged separately at the DEBUG level
                 this.log(logging_1.LogLevel.DEBUG, `failed response body`, {
                     body: error.body,
@@ -2285,8 +2235,8 @@ class Client {
         return this.request({
             path: api_endpoints_1.search.path(),
             method: api_endpoints_1.search.method,
-            query: (0, helpers_1.pick)(args, api_endpoints_1.search.queryParams),
-            body: (0, helpers_1.pick)(args, api_endpoints_1.search.bodyParams),
+            query: helpers_1.pick(args, api_endpoints_1.search.queryParams),
+            body: helpers_1.pick(args, api_endpoints_1.search.bodyParams),
             auth: args === null || args === void 0 ? void 0 : args.auth,
         });
     }
@@ -2297,7 +2247,7 @@ class Client {
      * @param args Arguments to send to the console
      */
     log(level, message, extraInfo) {
-        if ((0, logging_1.logLevelSeverity)(level) >= (0, logging_1.logLevelSeverity)(__classPrivateFieldGet(this, _Client_logLevel, "f"))) {
+        if (logging_1.logLevelSeverity(level) >= logging_1.logLevelSeverity(__classPrivateFieldGet(this, _Client_logLevel, "f"))) {
             __classPrivateFieldGet(this, _Client_logger, "f").call(this, level, message, extraInfo);
         }
     }
@@ -2321,7 +2271,7 @@ class Client {
 }
 exports["default"] = Client;
 _Client_auth = new WeakMap(), _Client_logLevel = new WeakMap(), _Client_logger = new WeakMap(), _Client_prefixUrl = new WeakMap(), _Client_timeoutMs = new WeakMap(), _Client_notionVersion = new WeakMap(), _Client_fetch = new WeakMap(), _Client_agent = new WeakMap(), _Client_userAgent = new WeakMap();
-Client.defaultNotionVersion = "2022-02-22";
+Client.defaultNotionVersion = "2021-05-13";
 //# sourceMappingURL=Client.js.map
 
 /***/ }),
@@ -2330,164 +2280,120 @@ Client.defaultNotionVersion = "2022-02-22";
 /***/ ((__unused_webpack_module, exports) => {
 
 
-// cspell:disable-file
-// Note: This is a generated file.
+/* eslint-disable @typescript-eslint/no-empty-interface */
+/**
+ * Notion API Endpoints
+ *
+ * This file contains metadata about each of the API endpoints such as the HTTP method, the parameters, and the types.
+ * In the future, the contents of this file will be generated from an API definition.
+ */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.search = exports.createDatabase = exports.listDatabases = exports.queryDatabase = exports.updateDatabase = exports.getDatabase = exports.appendBlockChildren = exports.listBlockChildren = exports.deleteBlock = exports.updateBlock = exports.getBlock = exports.getPageProperty = exports.updatePage = exports.getPage = exports.createPage = exports.listUsers = exports.getUser = exports.getSelf = void 0;
-exports.getSelf = {
-    method: "get",
-    pathParams: [],
-    queryParams: [],
-    bodyParams: [],
-    path: () => `users/me`,
-};
-exports.getUser = {
-    method: "get",
-    pathParams: ["user_id"],
-    queryParams: [],
-    bodyParams: [],
-    path: (p) => `users/${p.user_id}`,
-};
-exports.listUsers = {
-    method: "get",
-    pathParams: [],
-    queryParams: ["start_cursor", "page_size"],
-    bodyParams: [],
-    path: () => `users`,
-};
-exports.createPage = {
-    method: "post",
-    pathParams: [],
-    queryParams: [],
-    bodyParams: ["parent", "properties", "icon", "cover", "content", "children"],
-    path: () => `pages`,
-};
-exports.getPage = {
-    method: "get",
-    pathParams: ["page_id"],
-    queryParams: [],
-    bodyParams: [],
-    path: (p) => `pages/${p.page_id}`,
-};
-exports.updatePage = {
-    method: "patch",
-    pathParams: ["page_id"],
-    queryParams: [],
-    bodyParams: ["properties", "icon", "cover", "archived"],
-    path: (p) => `pages/${p.page_id}`,
-};
-exports.getPageProperty = {
-    method: "get",
-    pathParams: ["page_id", "property_id"],
-    queryParams: ["start_cursor", "page_size"],
-    bodyParams: [],
-    path: (p) => `pages/${p.page_id}/properties/${p.property_id}`,
-};
-exports.getBlock = {
+exports.search = exports.usersList = exports.usersRetrieve = exports.pagesUpdate = exports.pagesRetrieve = exports.databasesCreate = exports.pagesCreate = exports.databasesRetrieve = exports.databasesQuery = exports.databasesList = exports.blocksChildrenList = exports.blocksChildrenAppend = exports.blocksUpdate = exports.blocksRetrieve = void 0;
+exports.blocksRetrieve = {
     method: "get",
     pathParams: ["block_id"],
     queryParams: [],
     bodyParams: [],
     path: (p) => `blocks/${p.block_id}`,
 };
-exports.updateBlock = {
+exports.blocksUpdate = {
     method: "patch",
     pathParams: ["block_id"],
     queryParams: [],
     bodyParams: [
-        "embed",
-        "type",
-        "archived",
-        "bookmark",
-        "image",
-        "video",
-        "pdf",
-        "file",
-        "audio",
-        "code",
-        "equation",
-        "divider",
-        "breadcrumb",
-        "table_of_contents",
-        "link_to_page",
-        "table_row",
+        "paragraph",
         "heading_1",
         "heading_2",
         "heading_3",
-        "paragraph",
         "bulleted_list_item",
         "numbered_list_item",
-        "quote",
-        "to_do",
         "toggle",
-        "template",
-        "callout",
-        "synced_block",
-        "table",
+        "to_do",
     ],
     path: (p) => `blocks/${p.block_id}`,
 };
-exports.deleteBlock = {
-    method: "delete",
-    pathParams: ["block_id"],
-    queryParams: [],
-    bodyParams: [],
-    path: (p) => `blocks/${p.block_id}`,
-};
-exports.listBlockChildren = {
-    method: "get",
-    pathParams: ["block_id"],
-    queryParams: ["start_cursor", "page_size"],
-    bodyParams: [],
-    path: (p) => `blocks/${p.block_id}/children`,
-};
-exports.appendBlockChildren = {
+exports.blocksChildrenAppend = {
     method: "patch",
     pathParams: ["block_id"],
     queryParams: [],
     bodyParams: ["children"],
     path: (p) => `blocks/${p.block_id}/children`,
 };
-exports.getDatabase = {
+exports.blocksChildrenList = {
     method: "get",
-    pathParams: ["database_id"],
-    queryParams: [],
+    pathParams: ["block_id"],
+    queryParams: ["start_cursor", "page_size"],
     bodyParams: [],
-    path: (p) => `databases/${p.database_id}`,
+    path: (p) => `blocks/${p.block_id}/children`,
 };
-exports.updateDatabase = {
-    method: "patch",
-    pathParams: ["database_id"],
-    queryParams: [],
-    bodyParams: ["title", "icon", "cover", "properties", "archived"],
-    path: (p) => `databases/${p.database_id}`,
-};
-exports.queryDatabase = {
-    method: "post",
-    pathParams: ["database_id"],
-    queryParams: [],
-    bodyParams: ["sorts", "filter", "start_cursor", "page_size", "archived"],
-    path: (p) => `databases/${p.database_id}/query`,
-};
-exports.listDatabases = {
+exports.databasesList = {
     method: "get",
     pathParams: [],
     queryParams: ["start_cursor", "page_size"],
     bodyParams: [],
     path: () => `databases`,
 };
-exports.createDatabase = {
+exports.databasesQuery = {
+    method: "post",
+    pathParams: ["database_id"],
+    queryParams: [],
+    bodyParams: ["filter", "sorts", "start_cursor", "page_size"],
+    path: (p) => `databases/${p.database_id}/query`,
+};
+exports.databasesRetrieve = {
+    method: "get",
+    pathParams: ["database_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `databases/${p.database_id}`,
+};
+exports.pagesCreate = {
     method: "post",
     pathParams: [],
     queryParams: [],
-    bodyParams: ["parent", "properties", "icon", "cover", "title"],
+    bodyParams: ["parent", "properties", "children"],
+    path: () => `pages`,
+};
+exports.databasesCreate = {
+    method: "post",
+    pathParams: [],
+    queryParams: [],
+    bodyParams: ["parent", "properties", "title"],
     path: () => `databases`,
+};
+exports.pagesRetrieve = {
+    method: "get",
+    pathParams: ["page_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `pages/${p.page_id}`,
+};
+exports.pagesUpdate = {
+    method: "patch",
+    pathParams: ["page_id"],
+    queryParams: [],
+    bodyParams: ["archived", "properties"],
+    path: (p) => `pages/${p.page_id}`,
+};
+exports.usersRetrieve = {
+    method: "get",
+    pathParams: ["user_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `users/${p.user_id}`,
+};
+exports.usersList = {
+    method: "get",
+    pathParams: [],
+    queryParams: ["start_cursor", "page_size"],
+    bodyParams: [],
+    path: () => `users`,
 };
 exports.search = {
     method: "post",
     pathParams: [],
     queryParams: [],
-    bodyParams: ["sort", "query", "start_cursor", "page_size", "filter"],
+    bodyParams: ["query", "sort", "filter", "start_cursor", "page_size"],
     path: () => `search`,
 };
 //# sourceMappingURL=api-endpoints.js.map
@@ -2536,7 +2442,7 @@ class NotionClientErrorBase extends Error {
  * @returns `true` if error is a `NotionClientError`.
  */
 function isNotionClientError(error) {
-    return (0, helpers_1.isObject)(error) && error instanceof NotionClientErrorBase;
+    return helpers_1.isObject(error) && error instanceof NotionClientErrorBase;
 }
 exports.isNotionClientError = isNotionClientError;
 /**
@@ -2685,7 +2591,7 @@ function parseAPIErrorResponseBody(body) {
     catch (parseError) {
         return;
     }
-    if (!(0, helpers_1.isObject)(parsed) ||
+    if (!helpers_1.isObject(parsed) ||
         typeof parsed["message"] !== "string" ||
         !isAPIErrorCode(parsed["code"])) {
         return;
@@ -2790,7 +2696,7 @@ function logLevelSeverity(level) {
         case LogLevel.ERROR:
             return 80;
         default:
-            return (0, helpers_1.assertNever)(level);
+            return helpers_1.assertNever(level);
     }
 }
 exports.logLevelSeverity = logLevelSeverity;
@@ -10404,7 +10310,7 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("zlib");
 /***/ 3797:
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"name":"@notionhq/client","version":"1.0.4","description":"A simple and easy to use client for the Notion API","engines":{"node":">=12"},"homepage":"https://developers.notion.com/docs/getting-started","bugs":{"url":"https://github.com/makenotion/notion-sdk-js/issues"},"repository":{"type":"git","url":"https://github.com/makenotion/notion-sdk-js/"},"keywords":["notion","notionapi","rest","notion-api"],"main":"./build/src","types":"./build/src/index.d.ts","scripts":{"prepare":"npm run build","prepublishOnly":"npm run checkLoggedIn && npm run lint && npm run test","build":"tsc","prettier":"prettier --write .","lint":"prettier --check . && eslint . --ext .ts && cspell \'**/*\' ","test":"ava","check-links":"git ls-files | grep md$ | xargs -n 1 markdown-link-check","prebuild":"npm run clean","clean":"rm -rf ./build","checkLoggedIn":"./scripts/verifyLoggedIn.sh"},"author":"","license":"MIT","files":["build/package.json","build/src/**"],"dependencies":{"@types/node-fetch":"^2.5.10","node-fetch":"^2.6.1"},"devDependencies":{"@ava/typescript":"^2.0.0","@typescript-eslint/eslint-plugin":"^4.22.0","@typescript-eslint/parser":"^4.22.0","ava":"^3.15.0","cspell":"^5.4.1","eslint":"^7.24.0","markdown-link-check":"^3.8.7","prettier":"^2.3.0","typescript":"^4.2.4"}}');
+module.exports = JSON.parse('{"name":"@notionhq/client","version":"0.2.4","description":"A simple and easy to use client for the Notion API","engines":{"node":">=12"},"homepage":"https://developers.notion.com/docs/getting-started","bugs":{"url":"https://github.com/makenotion/notion-sdk-js/issues"},"repository":{"type":"git","url":"https://github.com/makenotion/notion-sdk-js/"},"keywords":["notion","notionapi","rest","notion-api"],"main":"./build/src","scripts":{"prepare":"npm run build","prepublishOnly":"npm run lint && npm run test","build":"tsc","prettier":"prettier --write .","lint":"prettier --check . && eslint . --ext .ts && cspell \'**/*\' ","test":"ava","check-links":"git ls-files | grep md$ | xargs -n 1 markdown-link-check","prebuild":"npm run clean","clean":"rm -rf ./build"},"author":"","license":"MIT","files":["build/package.json","build/src/**"],"dependencies":{"@types/node-fetch":"^2.5.10","node-fetch":"^2.6.1"},"devDependencies":{"@ava/typescript":"^2.0.0","@typescript-eslint/eslint-plugin":"^4.22.0","@typescript-eslint/parser":"^4.22.0","ava":"^3.15.0","cspell":"^5.4.1","eslint":"^7.24.0","markdown-link-check":"^3.8.7","prettier":"^2.3.0","typescript":"^4.2.4"}}');
 
 /***/ }),
 
