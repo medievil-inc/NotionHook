@@ -9528,15 +9528,19 @@ async function createComment(notion, commits) {
 
         // search for a page in the Notion database "Tasks" given the task name
         const page = notion.search({
-            query: task,
-            filter: { 
-                value: "page"
-            }
-        })
+            query: task //,
+            // filter: { 
+            //     value: "page"
+            // }
+        })[0];
+
+        console.log("-------------------------------------");
+        console.log(JSON.stringify(page, undefined, 2));
+        console.log("-------------------------------------");
 
         notion.comments.create({
             parent: {
-                page_id: page.page_id
+                page_id: page.parent.page_id
             },
             rich_text: [
                 {
