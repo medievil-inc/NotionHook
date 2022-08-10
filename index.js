@@ -52,4 +52,3 @@ async function createComment(notion, commits) {
         core.setFailed(error.message);
     }
 })();
-
