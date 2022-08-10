@@ -13,7 +13,7 @@ async function createComment(notion, commits) {
             filter: { 
                 value: "page"
             }
-        })
+        })[0];
 
         notion.comments.create({
             parent: {
@@ -44,6 +44,13 @@ async function createComment(notion, commits) {
             auth: core.getInput(`notion_secret`)
         });
         createComment(notion, github.context.payload.commits);
+
+        const page = notion.search({
+            query: task,
+            filter: { 
+                value: "page"
+            }
+        })
     } catch (error) {
         core.setFailed(error.message);
     }
