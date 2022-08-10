@@ -56,6 +56,7 @@ async function createComment(notion, commits) {
             auth: core.getInput(`notion_secret`) 
         });
         createComment(notion, github.context.payload.commits);
+        core.info(`PAYLOAD ${github.context.payload}`)
     } catch (error) {
         core.setFailed(error.message);
     }

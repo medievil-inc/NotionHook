@@ -10517,6 +10517,7 @@ async function createComment(notion, commits) {
             auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`) 
         });
         createComment(notion, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`PAYLOAD ${_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload}`)
     } catch (error) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
     }
