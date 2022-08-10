@@ -32,15 +32,12 @@ async function createComment(notion, commit) {
             ]
         }
     )
-    .then(result => core.info(result))
+    .then(result => core.info(JSON.stringify(result)))
     .catch(error => core.setFailed(error.message));
 }
 
 (async () => {
     try {
-        const payload = JSON.stringify(github.context.payload, undefined, 2)
-        console.log(`The event payload: ${payload}`);
-
         const notion = new Client({
             auth: core.getInput(`notion_secret`)
         });

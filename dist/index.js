@@ -9551,15 +9551,12 @@ async function createComment(notion, commit) {
             ]
         }
     )
-    .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(result))
+    .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(JSON.stringify(result)))
     .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
 }
 
 (async () => {
     try {
-        const payload = JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload, undefined, 2)
-        console.log(`The event payload: ${payload}`);
-
         const notion = new _notionhq_client__WEBPACK_IMPORTED_MODULE_2__/* .Client */ .KU({
             auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`)
         });
