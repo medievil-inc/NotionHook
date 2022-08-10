@@ -10464,15 +10464,19 @@ var __webpack_exports__ = {};
 
 
 async function createComment(notion, commits) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`COMMITS => ${commits}`);
+    
     commits.forEach((commit) => {
 
         const task = commit.message.substring(commit.message.indexOf("atnt:") + 6);
 
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`TASK => ${task}`);
         // search for a page in the Notion database "Tasks" given the task name
         const page = notion.pages.filter(
             (page) => page.properties.title === task
         )[0];
         
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`PAGE => ${page}`);
         var headers = new Headers();
         headers.append("Notion-Version", "2022-06-28");
         headers.append("Authorization", `Bearer ${_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("notion_secret")}`);

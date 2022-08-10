@@ -3,15 +3,19 @@ import github from "@actions/github"
 import { Client } from "@notionhq/client"
 
 async function createComment(notion, commits) {
+    core.info(`COMMITS => ${commits}`);
+    
     commits.forEach((commit) => {
 
         const task = commit.message.substring(commit.message.indexOf("atnt:") + 6);
 
+        core.info(`TASK => ${task}`);
         // search for a page in the Notion database "Tasks" given the task name
         const page = notion.pages.filter(
             (page) => page.properties.title === task
         )[0];
         
+        core.info(`PAGE => ${page}`);
         var headers = new Headers();
         headers.append("Notion-Version", "2022-06-28");
         headers.append("Authorization", `Bearer ${core.getInput("notion_secret")}`);
