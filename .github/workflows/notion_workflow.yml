@@ -7,6 +7,6 @@ jobs:
     steps:
       - name: Send commits information step
         id: notion
-        uses: medievil-inc/notion-action@1.1
+        uses: medievil-inc/notion-hook@1.1
         with:
           notion_secret: ${{ secrets.NOTION_SECRET }}
