@@ -138,7 +138,6 @@ const file_command_1 = __nccwpck_require__(5898);
 const utils_1 = __nccwpck_require__(353);
 const os = __importStar(__nccwpck_require__(2037));
 const path = __importStar(__nccwpck_require__(1017));
-const uuid_1 = __nccwpck_require__(1368);
 const oidc_utils_1 = __nccwpck_require__(7901);
 /**
  * The code to exit an action
@@ -168,14 +167,7 @@ function exportVariable(name, val) {
     process.env[name] = convertedVal;
     const filePath = process.env['GITHUB_ENV'] || '';
     if (filePath) {
-        const delimiter = `ghadelimiter_${uuid_1.v4()}`;
-        // These should realistically never happen, but just in case someone finds a way to exploit uuid generation let's not allow keys or values that contain the delimiter.
-        if (name.includes(delimiter)) {
-            throw new Error(`Unexpected input: name should not contain the delimiter "${delimiter}"`);
-        }
-        if (convertedVal.includes(delimiter)) {
-            throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
-        }
+        const delimiter = '_GitHubActionsFileCommandDelimeter_';
         const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
         file_command_1.issueCommand('ENV', commandValue);
     }
@@ -421,23 +413,6 @@ function getIDToken(aud) {
     });
 }
 exports.getIDToken = getIDToken;
-/**
- * Summary exports
- */
-var summary_1 = __nccwpck_require__(9050);
-Object.defineProperty(exports, "summary", ({ enumerable: true, get: function () { return summary_1.summary; } }));
-/**
- * @deprecated use core.summary
- */
-var summary_2 = __nccwpck_require__(9050);
-Object.defineProperty(exports, "markdownSummary", ({ enumerable: true, get: function () { return summary_2.markdownSummary; } }));
-/**
- * Path exports
- */
-var path_utils_1 = __nccwpck_require__(1341);
-Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
-Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
-Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -505,8 +480,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OidcClient = void 0;
-const http_client_1 = __nccwpck_require__(3658);
-const auth_1 = __nccwpck_require__(2660);
+const http_client_1 = __nccwpck_require__(2659);
+const auth_1 = __nccwpck_require__(2136);
 const core_1 = __nccwpck_require__(9935);
 class OidcClient {
     static createHttpClient(allowRetry = true, maxRetry = 10) {
@@ -570,359 +545,6 @@ class OidcClient {
 }
 exports.OidcClient = OidcClient;
 //# sourceMappingURL=oidc-utils.js.map
-
-/***/ }),
-
-/***/ 1341:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
-const path = __importStar(__nccwpck_require__(1017));
-/**
- * toPosixPath converts the given path to the posix form. On Windows, \\ will be
- * replaced with /.
- *
- * @param pth. Path to transform.
- * @return string Posix path.
- */
-function toPosixPath(pth) {
-    return pth.replace(/[\\]/g, '/');
-}
-exports.toPosixPath = toPosixPath;
-/**
- * toWin32Path converts the given path to the win32 form. On Linux, / will be
- * replaced with \\.
- *
- * @param pth. Path to transform.
- * @return string Win32 path.
- */
-function toWin32Path(pth) {
-    return pth.replace(/[/]/g, '\\');
-}
-exports.toWin32Path = toWin32Path;
-/**
- * toPlatformPath converts the given path to a platform-specific path. It does
- * this by replacing instances of / and \ with the platform-specific path
- * separator.
- *
- * @param pth The path to platformize.
- * @return string The platform-specific path.
- */
-function toPlatformPath(pth) {
-    return pth.replace(/[/\\]/g, path.sep);
-}
-exports.toPlatformPath = toPlatformPath;
-//# sourceMappingURL=path-utils.js.map
-
-/***/ }),
-
-/***/ 9050:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
-const os_1 = __nccwpck_require__(2037);
-const fs_1 = __nccwpck_require__(7147);
-const { access, appendFile, writeFile } = fs_1.promises;
-exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
-exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
-class Summary {
-    constructor() {
-        this._buffer = '';
-    }
-    /**
-     * Finds the summary file path from the environment, rejects if env var is not found or file does not exist
-     * Also checks r/w permissions.
-     *
-     * @returns step summary file path
-     */
-    filePath() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._filePath) {
-                return this._filePath;
-            }
-            const pathFromEnv = process.env[exports.SUMMARY_ENV_VAR];
-            if (!pathFromEnv) {
-                throw new Error(`Unable to find environment variable for $${exports.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
-            }
-            try {
-                yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
-            }
-            catch (_a) {
-                throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
-            }
-            this._filePath = pathFromEnv;
-            return this._filePath;
-        });
-    }
-    /**
-     * Wraps content in an HTML tag, adding any HTML attributes
-     *
-     * @param {string} tag HTML tag to wrap
-     * @param {string | null} content content within the tag
-     * @param {[attribute: string]: string} attrs key-value list of HTML attributes to add
-     *
-     * @returns {string} content wrapped in HTML element
-     */
-    wrap(tag, content, attrs = {}) {
-        const htmlAttrs = Object.entries(attrs)
-            .map(([key, value]) => ` ${key}="${value}"`)
-            .join('');
-        if (!content) {
-            return `<${tag}${htmlAttrs}>`;
-        }
-        return `<${tag}${htmlAttrs}>${content}</${tag}>`;
-    }
-    /**
-     * Writes text in the buffer to the summary buffer file and empties buffer. Will append by default.
-     *
-     * @param {SummaryWriteOptions} [options] (optional) options for write operation
-     *
-     * @returns {Promise<Summary>} summary instance
-     */
-    write(options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
-            const filePath = yield this.filePath();
-            const writeFunc = overwrite ? writeFile : appendFile;
-            yield writeFunc(filePath, this._buffer, { encoding: 'utf8' });
-            return this.emptyBuffer();
-        });
-    }
-    /**
-     * Clears the summary buffer and wipes the summary file
-     *
-     * @returns {Summary} summary instance
-     */
-    clear() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.emptyBuffer().write({ overwrite: true });
-        });
-    }
-    /**
-     * Returns the current summary buffer as a string
-     *
-     * @returns {string} string of summary buffer
-     */
-    stringify() {
-        return this._buffer;
-    }
-    /**
-     * If the summary buffer is empty
-     *
-     * @returns {boolen} true if the buffer is empty
-     */
-    isEmptyBuffer() {
-        return this._buffer.length === 0;
-    }
-    /**
-     * Resets the summary buffer without writing to summary file
-     *
-     * @returns {Summary} summary instance
-     */
-    emptyBuffer() {
-        this._buffer = '';
-        return this;
-    }
-    /**
-     * Adds raw text to the summary buffer
-     *
-     * @param {string} text content to add
-     * @param {boolean} [addEOL=false] (optional) append an EOL to the raw text (default: false)
-     *
-     * @returns {Summary} summary instance
-     */
-    addRaw(text, addEOL = false) {
-        this._buffer += text;
-        return addEOL ? this.addEOL() : this;
-    }
-    /**
-     * Adds the operating system-specific end-of-line marker to the buffer
-     *
-     * @returns {Summary} summary instance
-     */
-    addEOL() {
-        return this.addRaw(os_1.EOL);
-    }
-    /**
-     * Adds an HTML codeblock to the summary buffer
-     *
-     * @param {string} code content to render within fenced code block
-     * @param {string} lang (optional) language to syntax highlight code
-     *
-     * @returns {Summary} summary instance
-     */
-    addCodeBlock(code, lang) {
-        const attrs = Object.assign({}, (lang && { lang }));
-        const element = this.wrap('pre', this.wrap('code', code), attrs);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML list to the summary buffer
-     *
-     * @param {string[]} items list of items to render
-     * @param {boolean} [ordered=false] (optional) if the rendered list should be ordered or not (default: false)
-     *
-     * @returns {Summary} summary instance
-     */
-    addList(items, ordered = false) {
-        const tag = ordered ? 'ol' : 'ul';
-        const listItems = items.map(item => this.wrap('li', item)).join('');
-        const element = this.wrap(tag, listItems);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML table to the summary buffer
-     *
-     * @param {SummaryTableCell[]} rows table rows
-     *
-     * @returns {Summary} summary instance
-     */
-    addTable(rows) {
-        const tableBody = rows
-            .map(row => {
-            const cells = row
-                .map(cell => {
-                if (typeof cell === 'string') {
-                    return this.wrap('td', cell);
-                }
-                const { header, data, colspan, rowspan } = cell;
-                const tag = header ? 'th' : 'td';
-                const attrs = Object.assign(Object.assign({}, (colspan && { colspan })), (rowspan && { rowspan }));
-                return this.wrap(tag, data, attrs);
-            })
-                .join('');
-            return this.wrap('tr', cells);
-        })
-            .join('');
-        const element = this.wrap('table', tableBody);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds a collapsable HTML details element to the summary buffer
-     *
-     * @param {string} label text for the closed state
-     * @param {string} content collapsable content
-     *
-     * @returns {Summary} summary instance
-     */
-    addDetails(label, content) {
-        const element = this.wrap('details', this.wrap('summary', label) + content);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML image tag to the summary buffer
-     *
-     * @param {string} src path to the image you to embed
-     * @param {string} alt text description of the image
-     * @param {SummaryImageOptions} options (optional) addition image attributes
-     *
-     * @returns {Summary} summary instance
-     */
-    addImage(src, alt, options) {
-        const { width, height } = options || {};
-        const attrs = Object.assign(Object.assign({}, (width && { width })), (height && { height }));
-        const element = this.wrap('img', null, Object.assign({ src, alt }, attrs));
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML section heading element
-     *
-     * @param {string} text heading text
-     * @param {number | string} [level=1] (optional) the heading level, default: 1
-     *
-     * @returns {Summary} summary instance
-     */
-    addHeading(text, level) {
-        const tag = `h${level}`;
-        const allowedTag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tag)
-            ? tag
-            : 'h1';
-        const element = this.wrap(allowedTag, text);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML thematic break (<hr>) to the summary buffer
-     *
-     * @returns {Summary} summary instance
-     */
-    addSeparator() {
-        const element = this.wrap('hr', null);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML line break (<br>) to the summary buffer
-     *
-     * @returns {Summary} summary instance
-     */
-    addBreak() {
-        const element = this.wrap('br', null);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML blockquote to the summary buffer
-     *
-     * @param {string} text quote text
-     * @param {string} cite (optional) citation url
-     *
-     * @returns {Summary} summary instance
-     */
-    addQuote(text, cite) {
-        const attrs = Object.assign({}, (cite && { cite }));
-        const element = this.wrap('blockquote', text, attrs);
-        return this.addRaw(element).addEOL();
-    }
-    /**
-     * Adds an HTML anchor tag to the summary buffer
-     *
-     * @param {string} text link text/content
-     * @param {string} href hyperlink
-     *
-     * @returns {Summary} summary instance
-     */
-    addLink(text, href) {
-        const element = this.wrap('a', text, { href });
-        return this.addRaw(element).addEOL();
-    }
-}
-const _summary = new Summary();
-/**
- * @deprecated use `core.summary`
- */
-exports.markdownSummary = _summary;
-exports.summary = _summary;
-//# sourceMappingURL=summary.js.map
 
 /***/ }),
 
@@ -1099,7 +721,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getApiBaseUrl = exports.getProxyAgent = exports.getAuthString = void 0;
-const httpClient = __importStar(__nccwpck_require__(3658));
+const httpClient = __importStar(__nccwpck_require__(2659));
 function getAuthString(token, options) {
     if (!token && !options.auth) {
         throw new Error('Parameter token or opts.auth is required');
@@ -1183,40 +805,27 @@ exports.getOctokitOptions = getOctokitOptions;
 
 /***/ }),
 
-/***/ 2660:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ 2136:
+/***/ ((__unused_webpack_module, exports) => {
 
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PersonalAccessTokenCredentialHandler = exports.BearerCredentialHandler = exports.BasicCredentialHandler = void 0;
 class BasicCredentialHandler {
     constructor(username, password) {
         this.username = username;
         this.password = password;
     }
     prepareRequest(options) {
-        if (!options.headers) {
-            throw Error('The request has no headers');
-        }
-        options.headers['Authorization'] = `Basic ${Buffer.from(`${this.username}:${this.password}`).toString('base64')}`;
+        options.headers['Authorization'] =
+            'Basic ' +
+                Buffer.from(this.username + ':' + this.password).toString('base64');
     }
     // This handler cannot handle 401
-    canHandleAuthentication() {
+    canHandleAuthentication(response) {
         return false;
     }
-    handleAuthentication() {
-        return __awaiter(this, void 0, void 0, function* () {
-            throw new Error('not implemented');
-        });
+    handleAuthentication(httpClient, requestInfo, objs) {
+        return null;
     }
 }
 exports.BasicCredentialHandler = BasicCredentialHandler;
@@ -1227,19 +836,14 @@ class BearerCredentialHandler {
     // currently implements pre-authorization
     // TODO: support preAuth = false where it hooks on 401
     prepareRequest(options) {
-        if (!options.headers) {
-            throw Error('The request has no headers');
-        }
-        options.headers['Authorization'] = `Bearer ${this.token}`;
+        options.headers['Authorization'] = 'Bearer ' + this.token;
     }
     // This handler cannot handle 401
-    canHandleAuthentication() {
+    canHandleAuthentication(response) {
         return false;
     }
-    handleAuthentication() {
-        return __awaiter(this, void 0, void 0, function* () {
-            throw new Error('not implemented');
-        });
+    handleAuthentication(httpClient, requestInfo, objs) {
+        return null;
     }
 }
 exports.BearerCredentialHandler = BearerCredentialHandler;
@@ -1250,65 +854,31 @@ class PersonalAccessTokenCredentialHandler {
     // currently implements pre-authorization
     // TODO: support preAuth = false where it hooks on 401
     prepareRequest(options) {
-        if (!options.headers) {
-            throw Error('The request has no headers');
-        }
-        options.headers['Authorization'] = `Basic ${Buffer.from(`PAT:${this.token}`).toString('base64')}`;
+        options.headers['Authorization'] =
+            'Basic ' + Buffer.from('PAT:' + this.token).toString('base64');
     }
     // This handler cannot handle 401
-    canHandleAuthentication() {
+    canHandleAuthentication(response) {
         return false;
     }
-    handleAuthentication() {
-        return __awaiter(this, void 0, void 0, function* () {
-            throw new Error('not implemented');
-        });
+    handleAuthentication(httpClient, requestInfo, objs) {
+        return null;
     }
 }
 exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
-//# sourceMappingURL=auth.js.map
+
 
 /***/ }),
 
-/***/ 3658:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ 2659:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
-const http = __importStar(__nccwpck_require__(3685));
-const https = __importStar(__nccwpck_require__(5687));
-const pm = __importStar(__nccwpck_require__(9697));
-const tunnel = __importStar(__nccwpck_require__(7477));
+const http = __nccwpck_require__(3685);
+const https = __nccwpck_require__(5687);
+const pm = __nccwpck_require__(7142);
+let tunnel;
 var HttpCodes;
 (function (HttpCodes) {
     HttpCodes[HttpCodes["OK"] = 200] = "OK";
@@ -1353,7 +923,7 @@ var MediaTypes;
  * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
  */
 function getProxyUrl(serverUrl) {
-    const proxyUrl = pm.getProxyUrl(new URL(serverUrl));
+    let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
     return proxyUrl ? proxyUrl.href : '';
 }
 exports.getProxyUrl = getProxyUrl;
@@ -1386,22 +956,20 @@ class HttpClientResponse {
         this.message = message;
     }
     readBody() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
-                let output = Buffer.alloc(0);
-                this.message.on('data', (chunk) => {
-                    output = Buffer.concat([output, chunk]);
-                });
-                this.message.on('end', () => {
-                    resolve(output.toString());
-                });
-            }));
+        return new Promise(async (resolve, reject) => {
+            let output = Buffer.alloc(0);
+            this.message.on('data', (chunk) => {
+                output = Buffer.concat([output, chunk]);
+            });
+            this.message.on('end', () => {
+                resolve(output.toString());
+            });
         });
     }
 }
 exports.HttpClientResponse = HttpClientResponse;
 function isHttps(requestUrl) {
-    const parsedUrl = new URL(requestUrl);
+    let parsedUrl = new URL(requestUrl);
     return parsedUrl.protocol === 'https:';
 }
 exports.isHttps = isHttps;
@@ -1444,169 +1012,141 @@ class HttpClient {
         }
     }
     options(requestUrl, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
-        });
+        return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
     }
     get(requestUrl, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('GET', requestUrl, null, additionalHeaders || {});
-        });
+        return this.request('GET', requestUrl, null, additionalHeaders || {});
     }
     del(requestUrl, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('DELETE', requestUrl, null, additionalHeaders || {});
-        });
+        return this.request('DELETE', requestUrl, null, additionalHeaders || {});
     }
     post(requestUrl, data, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('POST', requestUrl, data, additionalHeaders || {});
-        });
+        return this.request('POST', requestUrl, data, additionalHeaders || {});
     }
     patch(requestUrl, data, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('PATCH', requestUrl, data, additionalHeaders || {});
-        });
+        return this.request('PATCH', requestUrl, data, additionalHeaders || {});
     }
     put(requestUrl, data, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('PUT', requestUrl, data, additionalHeaders || {});
-        });
+        return this.request('PUT', requestUrl, data, additionalHeaders || {});
     }
     head(requestUrl, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request('HEAD', requestUrl, null, additionalHeaders || {});
-        });
+        return this.request('HEAD', requestUrl, null, additionalHeaders || {});
     }
     sendStream(verb, requestUrl, stream, additionalHeaders) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.request(verb, requestUrl, stream, additionalHeaders);
-        });
+        return this.request(verb, requestUrl, stream, additionalHeaders);
     }
     /**
      * Gets a typed object from an endpoint
      * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
      */
-    getJson(requestUrl, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
-            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            const res = yield this.get(requestUrl, additionalHeaders);
-            return this._processResponse(res, this.requestOptions);
-        });
+    async getJson(requestUrl, additionalHeaders = {}) {
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        let res = await this.get(requestUrl, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
     }
-    postJson(requestUrl, obj, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = JSON.stringify(obj, null, 2);
-            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-            const res = yield this.post(requestUrl, data, additionalHeaders);
-            return this._processResponse(res, this.requestOptions);
-        });
+    async postJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.post(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
     }
-    putJson(requestUrl, obj, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = JSON.stringify(obj, null, 2);
-            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-            const res = yield this.put(requestUrl, data, additionalHeaders);
-            return this._processResponse(res, this.requestOptions);
-        });
+    async putJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.put(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
     }
-    patchJson(requestUrl, obj, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = JSON.stringify(obj, null, 2);
-            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-            const res = yield this.patch(requestUrl, data, additionalHeaders);
-            return this._processResponse(res, this.requestOptions);
-        });
+    async patchJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.patch(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
     }
     /**
      * Makes a raw http request.
      * All other methods such as get, post, patch, and request ultimately call this.
      * Prefer get, del, post and patch
      */
-    request(verb, requestUrl, data, headers) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._disposed) {
-                throw new Error('Client has already been disposed.');
-            }
-            const parsedUrl = new URL(requestUrl);
-            let info = this._prepareRequest(verb, parsedUrl, headers);
-            // Only perform retries on reads since writes may not be idempotent.
-            const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb)
-                ? this._maxRetries + 1
-                : 1;
-            let numTries = 0;
-            let response;
-            do {
-                response = yield this.requestRaw(info, data);
-                // Check if it's an authentication challenge
-                if (response &&
-                    response.message &&
-                    response.message.statusCode === HttpCodes.Unauthorized) {
-                    let authenticationHandler;
-                    for (const handler of this.handlers) {
-                        if (handler.canHandleAuthentication(response)) {
-                            authenticationHandler = handler;
-                            break;
-                        }
-                    }
-                    if (authenticationHandler) {
-                        return authenticationHandler.handleAuthentication(this, info, data);
-                    }
-                    else {
-                        // We have received an unauthorized response but have no handlers to handle it.
-                        // Let the response return to the caller.
-                        return response;
-                    }
-                }
-                let redirectsRemaining = this._maxRedirects;
-                while (response.message.statusCode &&
-                    HttpRedirectCodes.includes(response.message.statusCode) &&
-                    this._allowRedirects &&
-                    redirectsRemaining > 0) {
-                    const redirectUrl = response.message.headers['location'];
-                    if (!redirectUrl) {
-                        // if there's no location to redirect to, we won't
+    async request(verb, requestUrl, data, headers) {
+        if (this._disposed) {
+            throw new Error('Client has already been disposed.');
+        }
+        let parsedUrl = new URL(requestUrl);
+        let info = this._prepareRequest(verb, parsedUrl, headers);
+        // Only perform retries on reads since writes may not be idempotent.
+        let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1
+            ? this._maxRetries + 1
+            : 1;
+        let numTries = 0;
+        let response;
+        while (numTries < maxTries) {
+            response = await this.requestRaw(info, data);
+            // Check if it's an authentication challenge
+            if (response &&
+                response.message &&
+                response.message.statusCode === HttpCodes.Unauthorized) {
+                let authenticationHandler;
+                for (let i = 0; i < this.handlers.length; i++) {
+                    if (this.handlers[i].canHandleAuthentication(response)) {
+                        authenticationHandler = this.handlers[i];
                         break;
                     }
-                    const parsedRedirectUrl = new URL(redirectUrl);
-                    if (parsedUrl.protocol === 'https:' &&
-                        parsedUrl.protocol !== parsedRedirectUrl.protocol &&
-                        !this._allowRedirectDowngrade) {
-                        throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
-                    }
-                    // we need to finish reading the response before reassigning response
-                    // which will leak the open socket.
-                    yield response.readBody();
-                    // strip authorization header if redirected to a different hostname
-                    if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
-                        for (const header in headers) {
-                            // header names are case insensitive
-                            if (header.toLowerCase() === 'authorization') {
-                                delete headers[header];
-                            }
-                        }
-                    }
-                    // let's make the request with the new redirectUrl
-                    info = this._prepareRequest(verb, parsedRedirectUrl, headers);
-                    response = yield this.requestRaw(info, data);
-                    redirectsRemaining--;
                 }
-                if (!response.message.statusCode ||
-                    !HttpResponseRetryCodes.includes(response.message.statusCode)) {
-                    // If not a retry code, return immediately instead of retrying
+                if (authenticationHandler) {
+                    return authenticationHandler.handleAuthentication(this, info, data);
+                }
+                else {
+                    // We have received an unauthorized response but have no handlers to handle it.
+                    // Let the response return to the caller.
                     return response;
                 }
-                numTries += 1;
-                if (numTries < maxTries) {
-                    yield response.readBody();
-                    yield this._performExponentialBackoff(numTries);
+            }
+            let redirectsRemaining = this._maxRedirects;
+            while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 &&
+                this._allowRedirects &&
+                redirectsRemaining > 0) {
+                const redirectUrl = response.message.headers['location'];
+                if (!redirectUrl) {
+                    // if there's no location to redirect to, we won't
+                    break;
                 }
-            } while (numTries < maxTries);
-            return response;
-        });
+                let parsedRedirectUrl = new URL(redirectUrl);
+                if (parsedUrl.protocol == 'https:' &&
+                    parsedUrl.protocol != parsedRedirectUrl.protocol &&
+                    !this._allowRedirectDowngrade) {
+                    throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
+                }
+                // we need to finish reading the response before reassigning response
+                // which will leak the open socket.
+                await response.readBody();
+                // strip authorization header if redirected to a different hostname
+                if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
+                    for (let header in headers) {
+                        // header names are case insensitive
+                        if (header.toLowerCase() === 'authorization') {
+                            delete headers[header];
+                        }
+                    }
+                }
+                // let's make the request with the new redirectUrl
+                info = this._prepareRequest(verb, parsedRedirectUrl, headers);
+                response = await this.requestRaw(info, data);
+                redirectsRemaining--;
+            }
+            if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
+                // If not a retry code, return immediately instead of retrying
+                return response;
+            }
+            numTries += 1;
+            if (numTries < maxTries) {
+                await response.readBody();
+                await this._performExponentialBackoff(numTries);
+            }
+        }
+        return response;
     }
     /**
      * Needs to be called if keepAlive is set to true in request options.
@@ -1623,22 +1163,14 @@ class HttpClient {
      * @param data
      */
     requestRaw(info, data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                function callbackForResult(err, res) {
-                    if (err) {
-                        reject(err);
-                    }
-                    else if (!res) {
-                        // If `err` is not passed, then `res` must be passed.
-                        reject(new Error('Unknown error'));
-                    }
-                    else {
-                        resolve(res);
-                    }
+        return new Promise((resolve, reject) => {
+            let callbackForResult = function (err, res) {
+                if (err) {
+                    reject(err);
                 }
-                this.requestRawWithCallback(info, data, callbackForResult);
-            });
+                resolve(res);
+            };
+            this.requestRawWithCallback(info, data, callbackForResult);
         });
     }
     /**
@@ -1648,24 +1180,21 @@ class HttpClient {
      * @param onResult
      */
     requestRawWithCallback(info, data, onResult) {
+        let socket;
         if (typeof data === 'string') {
-            if (!info.options.headers) {
-                info.options.headers = {};
-            }
             info.options.headers['Content-Length'] = Buffer.byteLength(data, 'utf8');
         }
         let callbackCalled = false;
-        function handleResult(err, res) {
+        let handleResult = (err, res) => {
             if (!callbackCalled) {
                 callbackCalled = true;
                 onResult(err, res);
             }
-        }
-        const req = info.httpModule.request(info.options, (msg) => {
-            const res = new HttpClientResponse(msg);
-            handleResult(undefined, res);
+        };
+        let req = info.httpModule.request(info.options, (msg) => {
+            let res = new HttpClientResponse(msg);
+            handleResult(null, res);
         });
-        let socket;
         req.on('socket', sock => {
             socket = sock;
         });
@@ -1674,12 +1203,12 @@ class HttpClient {
             if (socket) {
                 socket.end();
             }
-            handleResult(new Error(`Request timeout: ${info.options.path}`));
+            handleResult(new Error('Request timeout: ' + info.options.path), null);
         });
         req.on('error', function (err) {
             // err has statusCode property
             // res should have headers
-            handleResult(err);
+            handleResult(err, null);
         });
         if (data && typeof data === 'string') {
             req.write(data, 'utf8');
@@ -1700,7 +1229,7 @@ class HttpClient {
      * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
      */
     getAgent(serverUrl) {
-        const parsedUrl = new URL(serverUrl);
+        let parsedUrl = new URL(serverUrl);
         return this._getAgent(parsedUrl);
     }
     _prepareRequest(method, requestUrl, headers) {
@@ -1724,19 +1253,21 @@ class HttpClient {
         info.options.agent = this._getAgent(info.parsedUrl);
         // gives handlers an opportunity to participate
         if (this.handlers) {
-            for (const handler of this.handlers) {
+            this.handlers.forEach(handler => {
                 handler.prepareRequest(info.options);
-            }
+            });
         }
         return info;
     }
     _mergeHeaders(headers) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
         if (this.requestOptions && this.requestOptions.headers) {
-            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers || {}));
+            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
         }
         return lowercaseKeys(headers || {});
     }
     _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
         let clientHeader;
         if (this.requestOptions && this.requestOptions.headers) {
             clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
@@ -1745,8 +1276,8 @@ class HttpClient {
     }
     _getAgent(parsedUrl) {
         let agent;
-        const proxyUrl = pm.getProxyUrl(parsedUrl);
-        const useProxy = proxyUrl && proxyUrl.hostname;
+        let proxyUrl = pm.getProxyUrl(parsedUrl);
+        let useProxy = proxyUrl && proxyUrl.hostname;
         if (this._keepAlive && useProxy) {
             agent = this._proxyAgent;
         }
@@ -1754,22 +1285,29 @@ class HttpClient {
             agent = this._agent;
         }
         // if agent is already assigned use that agent.
-        if (agent) {
+        if (!!agent) {
             return agent;
         }
         const usingSsl = parsedUrl.protocol === 'https:';
         let maxSockets = 100;
-        if (this.requestOptions) {
+        if (!!this.requestOptions) {
             maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
         }
-        // This is `useProxy` again, but we need to check `proxyURl` directly for TypeScripts's flow analysis.
-        if (proxyUrl && proxyUrl.hostname) {
+        if (useProxy) {
+            // If using proxy, need tunnel
+            if (!tunnel) {
+                tunnel = __nccwpck_require__(7477);
+            }
             const agentOptions = {
-                maxSockets,
+                maxSockets: maxSockets,
                 keepAlive: this._keepAlive,
-                proxy: Object.assign(Object.assign({}, ((proxyUrl.username || proxyUrl.password) && {
-                    proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
-                })), { host: proxyUrl.hostname, port: proxyUrl.port })
+                proxy: {
+                    ...((proxyUrl.username || proxyUrl.password) && {
+                        proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
+                    }),
+                    host: proxyUrl.hostname,
+                    port: proxyUrl.port
+                }
             };
             let tunnelAgent;
             const overHttps = proxyUrl.protocol === 'https:';
@@ -1784,7 +1322,7 @@ class HttpClient {
         }
         // if reusing agent across request and tunneling agent isn't assigned create a new agent
         if (this._keepAlive && !agent) {
-            const options = { keepAlive: this._keepAlive, maxSockets };
+            const options = { keepAlive: this._keepAlive, maxSockets: maxSockets };
             agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
             this._agent = agent;
         }
@@ -1803,116 +1341,108 @@ class HttpClient {
         return agent;
     }
     _performExponentialBackoff(retryNumber) {
-        return __awaiter(this, void 0, void 0, function* () {
-            retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
-            const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
-            return new Promise(resolve => setTimeout(() => resolve(), ms));
-        });
+        retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
+        const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
+        return new Promise(resolve => setTimeout(() => resolve(), ms));
     }
-    _processResponse(res, options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                const statusCode = res.message.statusCode || 0;
-                const response = {
-                    statusCode,
-                    result: null,
-                    headers: {}
-                };
-                // not found leads to null obj returned
-                if (statusCode === HttpCodes.NotFound) {
-                    resolve(response);
-                }
-                // get the result from the body
-                function dateTimeDeserializer(key, value) {
-                    if (typeof value === 'string') {
-                        const a = new Date(value);
-                        if (!isNaN(a.valueOf())) {
-                            return a;
-                        }
-                    }
-                    return value;
-                }
-                let obj;
-                let contents;
-                try {
-                    contents = yield res.readBody();
-                    if (contents && contents.length > 0) {
-                        if (options && options.deserializeDates) {
-                            obj = JSON.parse(contents, dateTimeDeserializer);
-                        }
-                        else {
-                            obj = JSON.parse(contents);
-                        }
-                        response.result = obj;
-                    }
-                    response.headers = res.message.headers;
-                }
-                catch (err) {
-                    // Invalid resource (contents not json);  leaving result obj null
-                }
-                // note that 3xx redirects are handled by the http layer.
-                if (statusCode > 299) {
-                    let msg;
-                    // if exception/error in body, attempt to get better error
-                    if (obj && obj.message) {
-                        msg = obj.message;
-                    }
-                    else if (contents && contents.length > 0) {
-                        // it may be the case that the exception is in the body message as string
-                        msg = contents;
+    static dateTimeDeserializer(key, value) {
+        if (typeof value === 'string') {
+            let a = new Date(value);
+            if (!isNaN(a.valueOf())) {
+                return a;
+            }
+        }
+        return value;
+    }
+    async _processResponse(res, options) {
+        return new Promise(async (resolve, reject) => {
+            const statusCode = res.message.statusCode;
+            const response = {
+                statusCode: statusCode,
+                result: null,
+                headers: {}
+            };
+            // not found leads to null obj returned
+            if (statusCode == HttpCodes.NotFound) {
+                resolve(response);
+            }
+            let obj;
+            let contents;
+            // get the result from the body
+            try {
+                contents = await res.readBody();
+                if (contents && contents.length > 0) {
+                    if (options && options.deserializeDates) {
+                        obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
                     }
                     else {
-                        msg = `Failed request: (${statusCode})`;
+                        obj = JSON.parse(contents);
                     }
-                    const err = new HttpClientError(msg, statusCode);
-                    err.result = response.result;
-                    reject(err);
+                    response.result = obj;
+                }
+                response.headers = res.message.headers;
+            }
+            catch (err) {
+                // Invalid resource (contents not json);  leaving result obj null
+            }
+            // note that 3xx redirects are handled by the http layer.
+            if (statusCode > 299) {
+                let msg;
+                // if exception/error in body, attempt to get better error
+                if (obj && obj.message) {
+                    msg = obj.message;
+                }
+                else if (contents && contents.length > 0) {
+                    // it may be the case that the exception is in the body message as string
+                    msg = contents;
                 }
                 else {
-                    resolve(response);
+                    msg = 'Failed request: (' + statusCode + ')';
                 }
-            }));
+                let err = new HttpClientError(msg, statusCode);
+                err.result = response.result;
+                reject(err);
+            }
+            else {
+                resolve(response);
+            }
         });
     }
 }
 exports.HttpClient = HttpClient;
-const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
-//# sourceMappingURL=index.js.map
+
 
 /***/ }),
 
-/***/ 9697:
+/***/ 7142:
 /***/ ((__unused_webpack_module, exports) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkBypass = exports.getProxyUrl = void 0;
 function getProxyUrl(reqUrl) {
-    const usingSsl = reqUrl.protocol === 'https:';
+    let usingSsl = reqUrl.protocol === 'https:';
+    let proxyUrl;
     if (checkBypass(reqUrl)) {
-        return undefined;
+        return proxyUrl;
     }
-    const proxyVar = (() => {
-        if (usingSsl) {
-            return process.env['https_proxy'] || process.env['HTTPS_PROXY'];
-        }
-        else {
-            return process.env['http_proxy'] || process.env['HTTP_PROXY'];
-        }
-    })();
-    if (proxyVar) {
-        return new URL(proxyVar);
+    let proxyVar;
+    if (usingSsl) {
+        proxyVar = process.env['https_proxy'] || process.env['HTTPS_PROXY'];
     }
     else {
-        return undefined;
+        proxyVar = process.env['http_proxy'] || process.env['HTTP_PROXY'];
     }
+    if (proxyVar) {
+        proxyUrl = new URL(proxyVar);
+    }
+    return proxyUrl;
 }
 exports.getProxyUrl = getProxyUrl;
 function checkBypass(reqUrl) {
     if (!reqUrl.hostname) {
         return false;
     }
-    const noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
+    let noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
     if (!noProxy) {
         return false;
     }
@@ -1928,12 +1458,12 @@ function checkBypass(reqUrl) {
         reqPort = 443;
     }
     // Format the request hostname and hostname with port
-    const upperReqHosts = [reqUrl.hostname.toUpperCase()];
+    let upperReqHosts = [reqUrl.hostname.toUpperCase()];
     if (typeof reqPort === 'number') {
         upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
     }
     // Compare request host against noproxy
-    for (const upperNoProxyItem of noProxy
+    for (let upperNoProxyItem of noProxy
         .split(',')
         .map(x => x.trim().toUpperCase())
         .filter(x => x)) {
@@ -1944,7 +1474,7 @@ function checkBypass(reqUrl) {
     return false;
 }
 exports.checkBypass = checkBypass;
-//# sourceMappingURL=proxy.js.map
+
 
 /***/ }),
 
@@ -1967,7 +1497,7 @@ var _Client_auth, _Client_logLevel, _Client_logger, _Client_prefixUrl, _Client_t
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const logging_1 = __nccwpck_require__(3959);
 const errors_1 = __nccwpck_require__(2755);
-const helpers_1 = __nccwpck_require__(223);
+const utils_1 = __nccwpck_require__(8287);
 const api_endpoints_1 = __nccwpck_require__(1469);
 const node_fetch_1 = __nccwpck_require__(4060);
 const package_json_1 = __nccwpck_require__(3797);
@@ -1992,10 +1522,10 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.blocksRetrieve.path(args),
-                    method: api_endpoints_1.blocksRetrieve.method,
-                    query: helpers_1.pick(args, api_endpoints_1.blocksRetrieve.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.blocksRetrieve.bodyParams),
+                    path: api_endpoints_1.getBlock.path(args),
+                    method: api_endpoints_1.getBlock.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.getBlock.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.getBlock.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2004,10 +1534,22 @@ class Client {
              */
             update: (args) => {
                 return this.request({
-                    path: api_endpoints_1.blocksUpdate.path(args),
-                    method: api_endpoints_1.blocksUpdate.method,
-                    query: helpers_1.pick(args, api_endpoints_1.blocksUpdate.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.blocksUpdate.bodyParams),
+                    path: api_endpoints_1.updateBlock.path(args),
+                    method: api_endpoints_1.updateBlock.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.updateBlock.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.updateBlock.bodyParams),
+                    auth: args === null || args === void 0 ? void 0 : args.auth,
+                });
+            },
+            /**
+             * Delete block
+             */
+            delete: (args) => {
+                return this.request({
+                    path: api_endpoints_1.deleteBlock.path(args),
+                    method: api_endpoints_1.deleteBlock.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.deleteBlock.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.deleteBlock.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2017,10 +1559,10 @@ class Client {
                  */
                 append: (args) => {
                     return this.request({
-                        path: api_endpoints_1.blocksChildrenAppend.path(args),
-                        method: api_endpoints_1.blocksChildrenAppend.method,
-                        query: helpers_1.pick(args, api_endpoints_1.blocksChildrenAppend.queryParams),
-                        body: helpers_1.pick(args, api_endpoints_1.blocksChildrenAppend.bodyParams),
+                        path: api_endpoints_1.appendBlockChildren.path(args),
+                        method: api_endpoints_1.appendBlockChildren.method,
+                        query: (0, utils_1.pick)(args, api_endpoints_1.appendBlockChildren.queryParams),
+                        body: (0, utils_1.pick)(args, api_endpoints_1.appendBlockChildren.bodyParams),
                         auth: args === null || args === void 0 ? void 0 : args.auth,
                     });
                 },
@@ -2029,10 +1571,10 @@ class Client {
                  */
                 list: (args) => {
                     return this.request({
-                        path: api_endpoints_1.blocksChildrenList.path(args),
-                        method: api_endpoints_1.blocksChildrenList.method,
-                        query: helpers_1.pick(args, api_endpoints_1.blocksChildrenList.queryParams),
-                        body: helpers_1.pick(args, api_endpoints_1.blocksChildrenList.bodyParams),
+                        path: api_endpoints_1.listBlockChildren.path(args),
+                        method: api_endpoints_1.listBlockChildren.method,
+                        query: (0, utils_1.pick)(args, api_endpoints_1.listBlockChildren.queryParams),
+                        body: (0, utils_1.pick)(args, api_endpoints_1.listBlockChildren.bodyParams),
                         auth: args === null || args === void 0 ? void 0 : args.auth,
                     });
                 },
@@ -2044,12 +1586,12 @@ class Client {
              *
              * @deprecated Please use `search`
              */
-            list: (args = {}) => {
+            list: (args) => {
                 return this.request({
-                    path: api_endpoints_1.databasesList.path(),
-                    method: api_endpoints_1.databasesList.method,
-                    query: helpers_1.pick(args, api_endpoints_1.databasesList.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.databasesList.bodyParams),
+                    path: api_endpoints_1.listDatabases.path(),
+                    method: api_endpoints_1.listDatabases.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.listDatabases.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.listDatabases.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2058,10 +1600,10 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.databasesRetrieve.path(args),
-                    method: api_endpoints_1.databasesRetrieve.method,
-                    query: helpers_1.pick(args, api_endpoints_1.databasesRetrieve.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.databasesRetrieve.bodyParams),
+                    path: api_endpoints_1.getDatabase.path(args),
+                    method: api_endpoints_1.getDatabase.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.getDatabase.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.getDatabase.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2070,10 +1612,10 @@ class Client {
              */
             query: (args) => {
                 return this.request({
-                    path: api_endpoints_1.databasesQuery.path(args),
-                    method: api_endpoints_1.databasesQuery.method,
-                    query: helpers_1.pick(args, api_endpoints_1.databasesQuery.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.databasesQuery.bodyParams),
+                    path: api_endpoints_1.queryDatabase.path(args),
+                    method: api_endpoints_1.queryDatabase.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.queryDatabase.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.queryDatabase.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2082,10 +1624,22 @@ class Client {
              */
             create: (args) => {
                 return this.request({
-                    path: api_endpoints_1.databasesCreate.path(),
-                    method: api_endpoints_1.databasesCreate.method,
-                    query: helpers_1.pick(args, api_endpoints_1.databasesCreate.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.databasesCreate.bodyParams),
+                    path: api_endpoints_1.createDatabase.path(),
+                    method: api_endpoints_1.createDatabase.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.createDatabase.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.createDatabase.bodyParams),
+                    auth: args === null || args === void 0 ? void 0 : args.auth,
+                });
+            },
+            /**
+             * Update a database
+             */
+            update: (args) => {
+                return this.request({
+                    path: api_endpoints_1.updateDatabase.path(args),
+                    method: api_endpoints_1.updateDatabase.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.updateDatabase.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.updateDatabase.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2096,10 +1650,10 @@ class Client {
              */
             create: (args) => {
                 return this.request({
-                    path: api_endpoints_1.pagesCreate.path(),
-                    method: api_endpoints_1.pagesCreate.method,
-                    query: helpers_1.pick(args, api_endpoints_1.pagesCreate.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.pagesCreate.bodyParams),
+                    path: api_endpoints_1.createPage.path(),
+                    method: api_endpoints_1.createPage.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.createPage.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.createPage.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2108,10 +1662,10 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.pagesRetrieve.path(args),
-                    method: api_endpoints_1.pagesRetrieve.method,
-                    query: helpers_1.pick(args, api_endpoints_1.pagesRetrieve.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.pagesRetrieve.bodyParams),
+                    path: api_endpoints_1.getPage.path(args),
+                    method: api_endpoints_1.getPage.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.getPage.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.getPage.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
@@ -2120,12 +1674,26 @@ class Client {
              */
             update: (args) => {
                 return this.request({
-                    path: api_endpoints_1.pagesUpdate.path(args),
-                    method: api_endpoints_1.pagesUpdate.method,
-                    query: helpers_1.pick(args, api_endpoints_1.pagesUpdate.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.pagesUpdate.bodyParams),
+                    path: api_endpoints_1.updatePage.path(args),
+                    method: api_endpoints_1.updatePage.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.updatePage.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.updatePage.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
+            },
+            properties: {
+                /**
+                 * Retrieve page property
+                 */
+                retrieve: (args) => {
+                    return this.request({
+                        path: api_endpoints_1.getPageProperty.path(args),
+                        method: api_endpoints_1.getPageProperty.method,
+                        query: (0, utils_1.pick)(args, api_endpoints_1.getPageProperty.queryParams),
+                        body: (0, utils_1.pick)(args, api_endpoints_1.getPageProperty.bodyParams),
+                        auth: args === null || args === void 0 ? void 0 : args.auth,
+                    });
+                },
             },
         };
         this.users = {
@@ -2134,29 +1702,79 @@ class Client {
              */
             retrieve: (args) => {
                 return this.request({
-                    path: api_endpoints_1.usersRetrieve.path(args),
-                    method: api_endpoints_1.usersRetrieve.method,
-                    query: helpers_1.pick(args, api_endpoints_1.usersRetrieve.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.usersRetrieve.bodyParams),
+                    path: api_endpoints_1.getUser.path(args),
+                    method: api_endpoints_1.getUser.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.getUser.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.getUser.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
             /**
              * List all users
              */
-            list: (args = {}) => {
+            list: (args) => {
                 return this.request({
-                    path: api_endpoints_1.usersList.path(),
-                    method: api_endpoints_1.usersList.method,
-                    query: helpers_1.pick(args, api_endpoints_1.usersList.queryParams),
-                    body: helpers_1.pick(args, api_endpoints_1.usersList.bodyParams),
+                    path: api_endpoints_1.listUsers.path(),
+                    method: api_endpoints_1.listUsers.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.listUsers.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.listUsers.bodyParams),
+                    auth: args === null || args === void 0 ? void 0 : args.auth,
+                });
+            },
+            /**
+             * Get details about bot
+             */
+            me: (args) => {
+                return this.request({
+                    path: api_endpoints_1.getSelf.path(),
+                    method: api_endpoints_1.getSelf.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.getSelf.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.getSelf.bodyParams),
                     auth: args === null || args === void 0 ? void 0 : args.auth,
                 });
             },
         };
+        this.comments = {
+            /**
+             * Create a comment
+             */
+            create: (args) => {
+                return this.request({
+                    path: api_endpoints_1.createComment.path(),
+                    method: api_endpoints_1.createComment.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.createComment.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.createComment.bodyParams),
+                    auth: args === null || args === void 0 ? void 0 : args.auth,
+                });
+            },
+            /**
+             * List comments
+             */
+            list: (args) => {
+                return this.request({
+                    path: api_endpoints_1.listComments.path(),
+                    method: api_endpoints_1.listComments.method,
+                    query: (0, utils_1.pick)(args, api_endpoints_1.listComments.queryParams),
+                    body: (0, utils_1.pick)(args, api_endpoints_1.listComments.bodyParams),
+                    auth: args === null || args === void 0 ? void 0 : args.auth,
+                });
+            },
+        };
+        /**
+         * Search
+         */
+        this.search = (args) => {
+            return this.request({
+                path: api_endpoints_1.search.path(),
+                method: api_endpoints_1.search.method,
+                query: (0, utils_1.pick)(args, api_endpoints_1.search.queryParams),
+                body: (0, utils_1.pick)(args, api_endpoints_1.search.bodyParams),
+                auth: args === null || args === void 0 ? void 0 : args.auth,
+            });
+        };
         __classPrivateFieldSet(this, _Client_auth, options === null || options === void 0 ? void 0 : options.auth, "f");
         __classPrivateFieldSet(this, _Client_logLevel, (_a = options === null || options === void 0 ? void 0 : options.logLevel) !== null && _a !== void 0 ? _a : logging_1.LogLevel.WARN, "f");
-        __classPrivateFieldSet(this, _Client_logger, (_b = options === null || options === void 0 ? void 0 : options.logger) !== null && _b !== void 0 ? _b : logging_1.makeConsoleLogger(package_json_1.name), "f");
+        __classPrivateFieldSet(this, _Client_logger, (_b = options === null || options === void 0 ? void 0 : options.logger) !== null && _b !== void 0 ? _b : (0, logging_1.makeConsoleLogger)(package_json_1.name), "f");
         __classPrivateFieldSet(this, _Client_prefixUrl, ((_c = options === null || options === void 0 ? void 0 : options.baseUrl) !== null && _c !== void 0 ? _c : "https://api.notion.com") + "/v1/", "f");
         __classPrivateFieldSet(this, _Client_timeoutMs, (_d = options === null || options === void 0 ? void 0 : options.timeoutMs) !== null && _d !== void 0 ? _d : 60000, "f");
         __classPrivateFieldSet(this, _Client_notionVersion, (_e = options === null || options === void 0 ? void 0 : options.notionVersion) !== null && _e !== void 0 ? _e : Client.defaultNotionVersion, "f");
@@ -2197,21 +1815,21 @@ class Client {
         }
         try {
             const response = await errors_1.RequestTimeoutError.rejectAfterTimeout(__classPrivateFieldGet(this, _Client_fetch, "f").call(this, url.toString(), {
-                method,
+                method: method.toUpperCase(),
                 headers,
                 body: bodyAsJsonString,
                 agent: __classPrivateFieldGet(this, _Client_agent, "f"),
             }), __classPrivateFieldGet(this, _Client_timeoutMs, "f"));
             const responseText = await response.text();
             if (!response.ok) {
-                throw errors_1.buildRequestError(response, responseText);
+                throw (0, errors_1.buildRequestError)(response, responseText);
             }
             const responseJson = JSON.parse(responseText);
             this.log(logging_1.LogLevel.INFO, `request success`, { method, path });
             return responseJson;
         }
         catch (error) {
-            if (!errors_1.isNotionClientError(error)) {
+            if (!(0, errors_1.isNotionClientError)(error)) {
                 throw error;
             }
             // Log the error if it's one of our known error types
@@ -2219,7 +1837,7 @@ class Client {
                 code: error.code,
                 message: error.message,
             });
-            if (errors_1.isHTTPResponseError(error)) {
+            if ((0, errors_1.isHTTPResponseError)(error)) {
                 // The response body may contain sensitive information so it is logged separately at the DEBUG level
                 this.log(logging_1.LogLevel.DEBUG, `failed response body`, {
                     body: error.body,
@@ -2229,25 +1847,13 @@ class Client {
         }
     }
     /**
-     * Search
-     */
-    search(args) {
-        return this.request({
-            path: api_endpoints_1.search.path(),
-            method: api_endpoints_1.search.method,
-            query: helpers_1.pick(args, api_endpoints_1.search.queryParams),
-            body: helpers_1.pick(args, api_endpoints_1.search.bodyParams),
-            auth: args === null || args === void 0 ? void 0 : args.auth,
-        });
-    }
-    /**
      * Emits a log message to the console.
      *
      * @param level The level for this message
      * @param args Arguments to send to the console
      */
     log(level, message, extraInfo) {
-        if (logging_1.logLevelSeverity(level) >= logging_1.logLevelSeverity(__classPrivateFieldGet(this, _Client_logLevel, "f"))) {
+        if ((0, logging_1.logLevelSeverity)(level) >= (0, logging_1.logLevelSeverity)(__classPrivateFieldGet(this, _Client_logLevel, "f"))) {
             __classPrivateFieldGet(this, _Client_logger, "f").call(this, level, message, extraInfo);
         }
     }
@@ -2271,7 +1877,7 @@ class Client {
 }
 exports["default"] = Client;
 _Client_auth = new WeakMap(), _Client_logLevel = new WeakMap(), _Client_logger = new WeakMap(), _Client_prefixUrl = new WeakMap(), _Client_timeoutMs = new WeakMap(), _Client_notionVersion = new WeakMap(), _Client_fetch = new WeakMap(), _Client_agent = new WeakMap(), _Client_userAgent = new WeakMap();
-Client.defaultNotionVersion = "2021-05-13";
+Client.defaultNotionVersion = "2022-06-28";
 //# sourceMappingURL=Client.js.map
 
 /***/ }),
@@ -2280,121 +1886,195 @@ Client.defaultNotionVersion = "2021-05-13";
 /***/ ((__unused_webpack_module, exports) => {
 
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
-/**
- * Notion API Endpoints
- *
- * This file contains metadata about each of the API endpoints such as the HTTP method, the parameters, and the types.
- * In the future, the contents of this file will be generated from an API definition.
- */
+// cspell:disable-file
+// Note: This is a generated file.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.search = exports.usersList = exports.usersRetrieve = exports.pagesUpdate = exports.pagesRetrieve = exports.databasesCreate = exports.pagesCreate = exports.databasesRetrieve = exports.databasesQuery = exports.databasesList = exports.blocksChildrenList = exports.blocksChildrenAppend = exports.blocksUpdate = exports.blocksRetrieve = void 0;
-exports.blocksRetrieve = {
-    method: "get",
-    pathParams: ["block_id"],
-    queryParams: [],
-    bodyParams: [],
-    path: (p) => `blocks/${p.block_id}`,
-};
-exports.blocksUpdate = {
-    method: "patch",
-    pathParams: ["block_id"],
-    queryParams: [],
-    bodyParams: [
-        "paragraph",
-        "heading_1",
-        "heading_2",
-        "heading_3",
-        "bulleted_list_item",
-        "numbered_list_item",
-        "toggle",
-        "to_do",
-    ],
-    path: (p) => `blocks/${p.block_id}`,
-};
-exports.blocksChildrenAppend = {
-    method: "patch",
-    pathParams: ["block_id"],
-    queryParams: [],
-    bodyParams: ["children"],
-    path: (p) => `blocks/${p.block_id}/children`,
-};
-exports.blocksChildrenList = {
-    method: "get",
-    pathParams: ["block_id"],
-    queryParams: ["start_cursor", "page_size"],
-    bodyParams: [],
-    path: (p) => `blocks/${p.block_id}/children`,
-};
-exports.databasesList = {
+exports.listComments = exports.createComment = exports.search = exports.createDatabase = exports.listDatabases = exports.queryDatabase = exports.updateDatabase = exports.getDatabase = exports.appendBlockChildren = exports.listBlockChildren = exports.deleteBlock = exports.updateBlock = exports.getBlock = exports.getPageProperty = exports.updatePage = exports.getPage = exports.createPage = exports.listUsers = exports.getUser = exports.getSelf = void 0;
+exports.getSelf = {
     method: "get",
     pathParams: [],
-    queryParams: ["start_cursor", "page_size"],
-    bodyParams: [],
-    path: () => `databases`,
-};
-exports.databasesQuery = {
-    method: "post",
-    pathParams: ["database_id"],
-    queryParams: [],
-    bodyParams: ["filter", "sorts", "start_cursor", "page_size"],
-    path: (p) => `databases/${p.database_id}/query`,
-};
-exports.databasesRetrieve = {
-    method: "get",
-    pathParams: ["database_id"],
     queryParams: [],
     bodyParams: [],
-    path: (p) => `databases/${p.database_id}`,
+    path: () => `users/me`,
 };
-exports.pagesCreate = {
-    method: "post",
-    pathParams: [],
-    queryParams: [],
-    bodyParams: ["parent", "properties", "children"],
-    path: () => `pages`,
-};
-exports.databasesCreate = {
-    method: "post",
-    pathParams: [],
-    queryParams: [],
-    bodyParams: ["parent", "properties", "title"],
-    path: () => `databases`,
-};
-exports.pagesRetrieve = {
-    method: "get",
-    pathParams: ["page_id"],
-    queryParams: [],
-    bodyParams: [],
-    path: (p) => `pages/${p.page_id}`,
-};
-exports.pagesUpdate = {
-    method: "patch",
-    pathParams: ["page_id"],
-    queryParams: [],
-    bodyParams: ["archived", "properties"],
-    path: (p) => `pages/${p.page_id}`,
-};
-exports.usersRetrieve = {
+exports.getUser = {
     method: "get",
     pathParams: ["user_id"],
     queryParams: [],
     bodyParams: [],
     path: (p) => `users/${p.user_id}`,
 };
-exports.usersList = {
+exports.listUsers = {
     method: "get",
     pathParams: [],
     queryParams: ["start_cursor", "page_size"],
     bodyParams: [],
     path: () => `users`,
 };
+exports.createPage = {
+    method: "post",
+    pathParams: [],
+    queryParams: [],
+    bodyParams: ["parent", "properties", "icon", "cover", "content", "children"],
+    path: () => `pages`,
+};
+exports.getPage = {
+    method: "get",
+    pathParams: ["page_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `pages/${p.page_id}`,
+};
+exports.updatePage = {
+    method: "patch",
+    pathParams: ["page_id"],
+    queryParams: [],
+    bodyParams: ["properties", "icon", "cover", "archived"],
+    path: (p) => `pages/${p.page_id}`,
+};
+exports.getPageProperty = {
+    method: "get",
+    pathParams: ["page_id", "property_id"],
+    queryParams: ["start_cursor", "page_size"],
+    bodyParams: [],
+    path: (p) => `pages/${p.page_id}/properties/${p.property_id}`,
+};
+exports.getBlock = {
+    method: "get",
+    pathParams: ["block_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `blocks/${p.block_id}`,
+};
+exports.updateBlock = {
+    method: "patch",
+    pathParams: ["block_id"],
+    queryParams: [],
+    bodyParams: [
+        "embed",
+        "type",
+        "archived",
+        "bookmark",
+        "image",
+        "video",
+        "pdf",
+        "file",
+        "audio",
+        "code",
+        "equation",
+        "divider",
+        "breadcrumb",
+        "table_of_contents",
+        "link_to_page",
+        "table_row",
+        "heading_1",
+        "heading_2",
+        "heading_3",
+        "paragraph",
+        "bulleted_list_item",
+        "numbered_list_item",
+        "quote",
+        "to_do",
+        "toggle",
+        "template",
+        "callout",
+        "synced_block",
+        "table",
+    ],
+    path: (p) => `blocks/${p.block_id}`,
+};
+exports.deleteBlock = {
+    method: "delete",
+    pathParams: ["block_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `blocks/${p.block_id}`,
+};
+exports.listBlockChildren = {
+    method: "get",
+    pathParams: ["block_id"],
+    queryParams: ["start_cursor", "page_size"],
+    bodyParams: [],
+    path: (p) => `blocks/${p.block_id}/children`,
+};
+exports.appendBlockChildren = {
+    method: "patch",
+    pathParams: ["block_id"],
+    queryParams: [],
+    bodyParams: ["children"],
+    path: (p) => `blocks/${p.block_id}/children`,
+};
+exports.getDatabase = {
+    method: "get",
+    pathParams: ["database_id"],
+    queryParams: [],
+    bodyParams: [],
+    path: (p) => `databases/${p.database_id}`,
+};
+exports.updateDatabase = {
+    method: "patch",
+    pathParams: ["database_id"],
+    queryParams: [],
+    bodyParams: [
+        "title",
+        "description",
+        "icon",
+        "cover",
+        "properties",
+        "is_inline",
+        "archived",
+    ],
+    path: (p) => `databases/${p.database_id}`,
+};
+exports.queryDatabase = {
+    method: "post",
+    pathParams: ["database_id"],
+    queryParams: [],
+    bodyParams: ["sorts", "filter", "start_cursor", "page_size", "archived"],
+    path: (p) => `databases/${p.database_id}/query`,
+};
+exports.listDatabases = {
+    method: "get",
+    pathParams: [],
+    queryParams: ["start_cursor", "page_size"],
+    bodyParams: [],
+    path: () => `databases`,
+};
+exports.createDatabase = {
+    method: "post",
+    pathParams: [],
+    queryParams: [],
+    bodyParams: [
+        "parent",
+        "properties",
+        "icon",
+        "cover",
+        "title",
+        "description",
+        "is_inline",
+    ],
+    path: () => `databases`,
+};
 exports.search = {
     method: "post",
     pathParams: [],
     queryParams: [],
-    bodyParams: ["query", "sort", "filter", "start_cursor", "page_size"],
+    bodyParams: ["sort", "query", "start_cursor", "page_size", "filter"],
     path: () => `search`,
+};
+exports.createComment = {
+    method: "post",
+    pathParams: [],
+    queryParams: [],
+    bodyParams: ["parent", "rich_text", "discussion_id"],
+    path: () => `comments`,
+};
+exports.listComments = {
+    method: "get",
+    pathParams: [],
+    queryParams: ["block_id", "start_cursor", "page_size"],
+    bodyParams: [],
+    path: () => `comments`,
 };
 //# sourceMappingURL=api-endpoints.js.map
 
@@ -2406,7 +2086,7 @@ exports.search = {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.buildRequestError = exports.APIResponseError = exports.UnknownHTTPResponseError = exports.isHTTPResponseError = exports.RequestTimeoutError = exports.isNotionClientError = exports.ClientErrorCode = exports.APIErrorCode = void 0;
-const helpers_1 = __nccwpck_require__(223);
+const utils_1 = __nccwpck_require__(8287);
 /**
  * Error codes returned in responses from the API.
  */
@@ -2442,7 +2122,7 @@ class NotionClientErrorBase extends Error {
  * @returns `true` if error is a `NotionClientError`.
  */
 function isNotionClientError(error) {
-    return helpers_1.isObject(error) && error instanceof NotionClientErrorBase;
+    return (0, utils_1.isObject)(error) && error instanceof NotionClientErrorBase;
 }
 exports.isNotionClientError = isNotionClientError;
 /**
@@ -2591,7 +2271,7 @@ function parseAPIErrorResponseBody(body) {
     catch (parseError) {
         return;
     }
-    if (!helpers_1.isObject(parsed) ||
+    if (!(0, utils_1.isObject)(parsed) ||
         typeof parsed["message"] !== "string" ||
         !isAPIErrorCode(parsed["code"])) {
         return;
@@ -2614,27 +2294,99 @@ function isAPIErrorCode(code) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isObject = exports.pick = exports.assertNever = void 0;
+exports.isFullComment = exports.isFullUser = exports.isFullDatabase = exports.isFullPage = exports.isFullBlock = exports.collectPaginatedAPI = exports.iteratePaginatedAPI = void 0;
 /**
- * Utility for enforcing exhaustiveness checks in the type system.
+ * Returns an async iterator over the results of any paginated Notion API.
  *
- * @see https://basarat.gitbook.io/typescript/type-system/discriminated-unions#throw-in-exhaustive-checks
+ * Example (given a notion Client called `notion`):
  *
- * @param value The variable with no remaining values
+ * ```
+ * for await (const block of iteratePaginatedAPI(notion.blocks.children.list, {
+ *   block_id: parentBlockId,
+ * })) {
+ *   // Do something with block.
+ * }
+ * ```
+ *
+ * @param listFn A bound function on the Notion client that represents a conforming paginated
+ *   API. Example: `notion.blocks.children.list`.
+ * @param firstPageArgs Arguments that should be passed to the API on the first and subsequent
+ *   calls to the API. Any necessary `next_cursor` will be automatically populated by
+ *   this function. Example: `{ block_id: "<my block id>" }`
  */
-function assertNever(value) {
-    throw new Error(`Unexpected value should never occur: ${value}`);
+async function* iteratePaginatedAPI(listFn, firstPageArgs) {
+    let nextCursor = firstPageArgs.start_cursor;
+    do {
+        const response = await listFn({
+            ...firstPageArgs,
+            start_cursor: nextCursor,
+        });
+        yield* response.results;
+        nextCursor = response.next_cursor;
+    } while (nextCursor);
 }
-exports.assertNever = assertNever;
-function pick(base, keys) {
-    const entries = keys.map(key => [key, base === null || base === void 0 ? void 0 : base[key]]);
-    return Object.fromEntries(entries);
+exports.iteratePaginatedAPI = iteratePaginatedAPI;
+/**
+ * Collect all of the results of paginating an API into an in-memory array.
+ *
+ * Example (given a notion Client called `notion`):
+ *
+ * ```
+ * const blocks = collectPaginatedAPI(notion.blocks.children.list, {
+ *   block_id: parentBlockId,
+ * })
+ * // Do something with blocks.
+ * ```
+ *
+ * @param listFn A bound function on the Notion client that represents a conforming paginated
+ *   API. Example: `notion.blocks.children.list`.
+ * @param firstPageArgs Arguments that should be passed to the API on the first and subsequent
+ *   calls to the API. Any necessary `next_cursor` will be automatically populated by
+ *   this function. Example: `{ block_id: "<my block id>" }`
+ */
+async function collectPaginatedAPI(listFn, firstPageArgs) {
+    const results = [];
+    for await (const item of iteratePaginatedAPI(listFn, firstPageArgs)) {
+        results.push(item);
+    }
+    return results;
 }
-exports.pick = pick;
-function isObject(o) {
-    return typeof o === "object" && o !== null;
+exports.collectPaginatedAPI = collectPaginatedAPI;
+/**
+ * @returns `true` if `response` is a full `BlockObjectResponse`.
+ */
+function isFullBlock(response) {
+    return "type" in response;
 }
-exports.isObject = isObject;
+exports.isFullBlock = isFullBlock;
+/**
+ * @returns `true` if `response` is a full `PageObjectResponse`.
+ */
+function isFullPage(response) {
+    return "url" in response;
+}
+exports.isFullPage = isFullPage;
+/**
+ * @returns `true` if `response` is a full `DatabaseObjectResponse`.
+ */
+function isFullDatabase(response) {
+    return "title" in response;
+}
+exports.isFullDatabase = isFullDatabase;
+/**
+ * @returns `true` if `response` is a full `UserObjectResponse`.
+ */
+function isFullUser(response) {
+    return "type" in response;
+}
+exports.isFullUser = isFullUser;
+/**
+ * @returns `true` if `response` is a full `CommentObjectResponse`.
+ */
+function isFullComment(response) {
+    return "created_by" in response;
+}
+exports.isFullComment = isFullComment;
 //# sourceMappingURL=helpers.js.map
 
 /***/ }),
@@ -2645,7 +2397,7 @@ exports.isObject = isObject;
 var __webpack_unused_export__;
 
 __webpack_unused_export__ = ({ value: true });
-__webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = exports.KU = void 0;
+__webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = exports.KU = void 0;
 var Client_1 = __nccwpck_require__(6293);
 Object.defineProperty(exports, "KU", ({ enumerable: true, get: function () { return Client_1.default; } }));
 var logging_1 = __nccwpck_require__(3959);
@@ -2658,6 +2410,14 @@ __webpack_unused_export__ = ({ enumerable: true, get: function () { return error
 __webpack_unused_export__ = ({ enumerable: true, get: function () { return errors_1.RequestTimeoutError; } });
 // Error helpers
 __webpack_unused_export__ = ({ enumerable: true, get: function () { return errors_1.isNotionClientError; } });
+var helpers_1 = __nccwpck_require__(223);
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.collectPaginatedAPI; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.iteratePaginatedAPI; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.isFullBlock; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.isFullDatabase; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.isFullPage; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.isFullUser; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return helpers_1.isFullComment; } });
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -2668,7 +2428,7 @@ __webpack_unused_export__ = ({ enumerable: true, get: function () { return error
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.logLevelSeverity = exports.makeConsoleLogger = exports.LogLevel = void 0;
-const helpers_1 = __nccwpck_require__(223);
+const utils_1 = __nccwpck_require__(8287);
 var LogLevel;
 (function (LogLevel) {
     LogLevel["DEBUG"] = "debug";
@@ -2696,11 +2456,41 @@ function logLevelSeverity(level) {
         case LogLevel.ERROR:
             return 80;
         default:
-            return helpers_1.assertNever(level);
+            return (0, utils_1.assertNever)(level);
     }
 }
 exports.logLevelSeverity = logLevelSeverity;
 //# sourceMappingURL=logging.js.map
+
+/***/ }),
+
+/***/ 8287:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isObject = exports.pick = exports.assertNever = void 0;
+/**
+ * Utility for enforcing exhaustiveness checks in the type system.
+ *
+ * @see https://basarat.gitbook.io/typescript/type-system/discriminated-unions#throw-in-exhaustive-checks
+ *
+ * @param value The variable with no remaining values
+ */
+function assertNever(value) {
+    throw new Error(`Unexpected value should never occur: ${value}`);
+}
+exports.assertNever = assertNever;
+function pick(base, keys) {
+    const entries = keys.map(key => [key, base === null || base === void 0 ? void 0 : base[key]]);
+    return Object.fromEntries(entries);
+}
+exports.pick = pick;
+function isObject(o) {
+    return typeof o === "object" && o !== null;
+}
+exports.isObject = isObject;
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 
@@ -7568,637 +7358,6 @@ exports.getUserAgent = getUserAgent;
 
 /***/ }),
 
-/***/ 1368:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "v1", ({
-  enumerable: true,
-  get: function () {
-    return _v.default;
-  }
-}));
-Object.defineProperty(exports, "v3", ({
-  enumerable: true,
-  get: function () {
-    return _v2.default;
-  }
-}));
-Object.defineProperty(exports, "v4", ({
-  enumerable: true,
-  get: function () {
-    return _v3.default;
-  }
-}));
-Object.defineProperty(exports, "v5", ({
-  enumerable: true,
-  get: function () {
-    return _v4.default;
-  }
-}));
-Object.defineProperty(exports, "NIL", ({
-  enumerable: true,
-  get: function () {
-    return _nil.default;
-  }
-}));
-Object.defineProperty(exports, "version", ({
-  enumerable: true,
-  get: function () {
-    return _version.default;
-  }
-}));
-Object.defineProperty(exports, "validate", ({
-  enumerable: true,
-  get: function () {
-    return _validate.default;
-  }
-}));
-Object.defineProperty(exports, "stringify", ({
-  enumerable: true,
-  get: function () {
-    return _stringify.default;
-  }
-}));
-Object.defineProperty(exports, "parse", ({
-  enumerable: true,
-  get: function () {
-    return _parse.default;
-  }
-}));
-
-var _v = _interopRequireDefault(__nccwpck_require__(3258));
-
-var _v2 = _interopRequireDefault(__nccwpck_require__(2559));
-
-var _v3 = _interopRequireDefault(__nccwpck_require__(2872));
-
-var _v4 = _interopRequireDefault(__nccwpck_require__(5034));
-
-var _nil = _interopRequireDefault(__nccwpck_require__(6051));
-
-var _version = _interopRequireDefault(__nccwpck_require__(6630));
-
-var _validate = _interopRequireDefault(__nccwpck_require__(6879));
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(2992));
-
-var _parse = _interopRequireDefault(__nccwpck_require__(3783));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-
-/***/ 1102:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function md5(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === 'string') {
-    bytes = Buffer.from(bytes, 'utf8');
-  }
-
-  return _crypto.default.createHash('md5').update(bytes).digest();
-}
-
-var _default = md5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 6051:
-/***/ ((__unused_webpack_module, exports) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = '00000000-0000-0000-0000-000000000000';
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 3783:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__nccwpck_require__(6879));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function parse(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  let v;
-  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
-
-  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
-  arr[1] = v >>> 16 & 0xff;
-  arr[2] = v >>> 8 & 0xff;
-  arr[3] = v & 0xff; // Parse ........-####-....-....-............
-
-  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
-  arr[5] = v & 0xff; // Parse ........-....-####-....-............
-
-  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
-  arr[7] = v & 0xff; // Parse ........-....-....-####-............
-
-  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
-  arr[9] = v & 0xff; // Parse ........-....-....-....-############
-  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
-
-  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
-  arr[11] = v / 0x100000000 & 0xff;
-  arr[12] = v >>> 24 & 0xff;
-  arr[13] = v >>> 16 & 0xff;
-  arr[14] = v >>> 8 & 0xff;
-  arr[15] = v & 0xff;
-  return arr;
-}
-
-var _default = parse;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 4557:
-/***/ ((__unused_webpack_module, exports) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 160:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = rng;
-
-var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
-
-let poolPtr = rnds8Pool.length;
-
-function rng() {
-  if (poolPtr > rnds8Pool.length - 16) {
-    _crypto.default.randomFillSync(rnds8Pool);
-
-    poolPtr = 0;
-  }
-
-  return rnds8Pool.slice(poolPtr, poolPtr += 16);
-}
-
-/***/ }),
-
-/***/ 4850:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function sha1(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === 'string') {
-    bytes = Buffer.from(bytes, 'utf8');
-  }
-
-  return _crypto.default.createHash('sha1').update(bytes).digest();
-}
-
-var _default = sha1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 2992:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__nccwpck_require__(6879));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-const byteToHex = [];
-
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).substr(1));
-}
-
-function stringify(arr, offset = 0) {
-  // Note: Be careful editing this code!  It's been tuned for performance
-  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
-  // of the following:
-  // - One or more input array values don't map to a hex octet (leading to
-  // "undefined" in the uuid)
-  // - Invalid input values for the RFC `version` or `variant` fields
-
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Stringified UUID is invalid');
-  }
-
-  return uuid;
-}
-
-var _default = stringify;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 3258:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _rng = _interopRequireDefault(__nccwpck_require__(160));
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(2992));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-let _nodeId;
-
-let _clockseq; // Previous uuid creation time
-
-
-let _lastMSecs = 0;
-let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
-
-function v1(options, buf, offset) {
-  let i = buf && offset || 0;
-  const b = buf || new Array(16);
-  options = options || {};
-  let node = options.node || _nodeId;
-  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-
-  if (node == null || clockseq == null) {
-    const seedBytes = options.random || (options.rng || _rng.default)();
-
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-    }
-
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-
-
-  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-
-  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
-
-  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
-
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-
-
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  } // Per 4.2.1.2 Throw error if too many uuids are requested
-
-
-  if (nsecs >= 10000) {
-    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-
-  msecs += 12219292800000; // `time_low`
-
-  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff; // `time_mid`
-
-  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff; // `time_high_and_version`
-
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-
-  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-
-  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
-
-  b[i++] = clockseq & 0xff; // `node`
-
-  for (let n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf || (0, _stringify.default)(b);
-}
-
-var _default = v1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 2559:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__nccwpck_require__(810));
-
-var _md = _interopRequireDefault(__nccwpck_require__(1102));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v3 = (0, _v.default)('v3', 0x30, _md.default);
-var _default = v3;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 810:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = _default;
-exports.URL = exports.DNS = void 0;
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(2992));
-
-var _parse = _interopRequireDefault(__nccwpck_require__(3783));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function stringToBytes(str) {
-  str = unescape(encodeURIComponent(str)); // UTF8 escape
-
-  const bytes = [];
-
-  for (let i = 0; i < str.length; ++i) {
-    bytes.push(str.charCodeAt(i));
-  }
-
-  return bytes;
-}
-
-const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-exports.DNS = DNS;
-const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-exports.URL = URL;
-
-function _default(name, version, hashfunc) {
-  function generateUUID(value, namespace, buf, offset) {
-    if (typeof value === 'string') {
-      value = stringToBytes(value);
-    }
-
-    if (typeof namespace === 'string') {
-      namespace = (0, _parse.default)(namespace);
-    }
-
-    if (namespace.length !== 16) {
-      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
-    } // Compute hash of namespace and value, Per 4.3
-    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
-    // hashfunc([...namespace, ... value])`
-
-
-    let bytes = new Uint8Array(16 + value.length);
-    bytes.set(namespace);
-    bytes.set(value, namespace.length);
-    bytes = hashfunc(bytes);
-    bytes[6] = bytes[6] & 0x0f | version;
-    bytes[8] = bytes[8] & 0x3f | 0x80;
-
-    if (buf) {
-      offset = offset || 0;
-
-      for (let i = 0; i < 16; ++i) {
-        buf[offset + i] = bytes[i];
-      }
-
-      return buf;
-    }
-
-    return (0, _stringify.default)(bytes);
-  } // Function#name is not settable on some platforms (#270)
-
-
-  try {
-    generateUUID.name = name; // eslint-disable-next-line no-empty
-  } catch (err) {} // For CommonJS default export support
-
-
-  generateUUID.DNS = DNS;
-  generateUUID.URL = URL;
-  return generateUUID;
-}
-
-/***/ }),
-
-/***/ 2872:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _rng = _interopRequireDefault(__nccwpck_require__(160));
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(2992));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function v4(options, buf, offset) {
-  options = options || {};
-
-  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-
-
-  rnds[6] = rnds[6] & 0x0f | 0x40;
-  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
-
-  if (buf) {
-    offset = offset || 0;
-
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
-    }
-
-    return buf;
-  }
-
-  return (0, _stringify.default)(rnds);
-}
-
-var _default = v4;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 5034:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__nccwpck_require__(810));
-
-var _sha = _interopRequireDefault(__nccwpck_require__(4850));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v5 = (0, _v.default)('v5', 0x50, _sha.default);
-var _default = v5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 6879:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _regex = _interopRequireDefault(__nccwpck_require__(4557));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validate(uuid) {
-  return typeof uuid === 'string' && _regex.default.test(uuid);
-}
-
-var _default = validate;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 6630:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__nccwpck_require__(6879));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function version(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  return parseInt(uuid.substr(14, 1), 16);
-}
-
-var _default = version;
-exports["default"] = _default;
-
-/***/ }),
-
 /***/ 5343:
 /***/ ((module) => {
 
@@ -10209,13 +9368,6 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("assert");
 
 /***/ }),
 
-/***/ 6113:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("crypto");
-
-/***/ }),
-
 /***/ 2361:
 /***/ ((module) => {
 
@@ -10310,7 +9462,7 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("zlib");
 /***/ 3797:
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"name":"@notionhq/client","version":"0.2.4","description":"A simple and easy to use client for the Notion API","engines":{"node":">=12"},"homepage":"https://developers.notion.com/docs/getting-started","bugs":{"url":"https://github.com/makenotion/notion-sdk-js/issues"},"repository":{"type":"git","url":"https://github.com/makenotion/notion-sdk-js/"},"keywords":["notion","notionapi","rest","notion-api"],"main":"./build/src","scripts":{"prepare":"npm run build","prepublishOnly":"npm run lint && npm run test","build":"tsc","prettier":"prettier --write .","lint":"prettier --check . && eslint . --ext .ts && cspell \'**/*\' ","test":"ava","check-links":"git ls-files | grep md$ | xargs -n 1 markdown-link-check","prebuild":"npm run clean","clean":"rm -rf ./build"},"author":"","license":"MIT","files":["build/package.json","build/src/**"],"dependencies":{"@types/node-fetch":"^2.5.10","node-fetch":"^2.6.1"},"devDependencies":{"@ava/typescript":"^2.0.0","@typescript-eslint/eslint-plugin":"^4.22.0","@typescript-eslint/parser":"^4.22.0","ava":"^3.15.0","cspell":"^5.4.1","eslint":"^7.24.0","markdown-link-check":"^3.8.7","prettier":"^2.3.0","typescript":"^4.2.4"}}');
+module.exports = JSON.parse('{"name":"@notionhq/client","version":"2.1.1","description":"A simple and easy to use client for the Notion API","engines":{"node":">=12"},"homepage":"https://developers.notion.com/docs/getting-started","bugs":{"url":"https://github.com/makenotion/notion-sdk-js/issues"},"repository":{"type":"git","url":"https://github.com/makenotion/notion-sdk-js/"},"keywords":["notion","notionapi","rest","notion-api"],"main":"./build/src","types":"./build/src/index.d.ts","scripts":{"prepare":"npm run build","prepublishOnly":"npm run checkLoggedIn && npm run lint && npm run test","build":"tsc","prettier":"prettier --write .","lint":"prettier --check . && eslint . --ext .ts && cspell \'**/*\' ","test":"jest ./test","check-links":"git ls-files | grep md$ | xargs -n 1 markdown-link-check","prebuild":"npm run clean","clean":"rm -rf ./build","checkLoggedIn":"./scripts/verifyLoggedIn.sh"},"author":"","license":"MIT","files":["build/package.json","build/src/**"],"dependencies":{"@types/node-fetch":"^2.5.10","node-fetch":"^2.6.1"},"devDependencies":{"@types/jest":"^28.1.4","@typescript-eslint/eslint-plugin":"^4.22.0","@typescript-eslint/parser":"^4.22.0","cspell":"^5.4.1","eslint":"^7.24.0","jest":"^28.1.2","markdown-link-check":"^3.8.7","prettier":"^2.3.0","ts-jest":"^28.0.5","typescript":"^4.2.4"}}');
 
 /***/ }),
 
@@ -10370,61 +9522,47 @@ var __webpack_exports__ = {};
 
 
 async function createComment(notion, commits) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`COMMITS => ${commits}`);
-    
     commits.forEach((commit) => {
 
         const task = commit.message.substring(commit.message.indexOf("atnt:") + 6);
 
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`TASK => ${task}`);
         // search for a page in the Notion database "Tasks" given the task name
-        const page = notion.pages.filter(
-            (page) => page.properties.title === task
-        )[0];
-        
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`PAGE => ${page}`);
-        var headers = new Headers();
-        headers.append("Notion-Version", "2022-06-28");
-        headers.append("Authorization", `Bearer ${_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("notion_secret")}`);
-        headers.append("Content-Type", `application/json`);
+        const page = notion.search({
+            query: task,
+            filter: { 
+                value: "page"
+            }
+        })
 
-        var raw = JSON.stringify({
-            "parent": {
-                "page_id": page.page_id
+        notion.comments.create({
+            parent: {
+                page_id: page.page_id
             },
-            "rich_text": [
+            rich_text: [
                 {
                     [_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("commit_url")]: {
-                        "text": {
-                            "content": commit.url
+                        text: {
+                            content: commit.url
                         }
                     }
                 }
             ]
-        });
-
-        var requestOptions = {
-            method: 'POST',
-            headers: headers,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch("https://api.notion.com/v1/comments", requestOptions)
-            .then(response => response.text())
-            .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(result))
-            .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
+        })
+        .then(response => response.text())
+        .then(result => _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(result))
+        .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
     });
 }
 
 (async () => {
     try {
-        const notion = new _notionhq_client__WEBPACK_IMPORTED_MODULE_2__/* .Client */ .KU({ 
-            auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`) 
-        });
-        createComment(notion, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits);
         const payload = JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload, undefined, 2)
         console.log(`The event payload: ${payload}`);
+
+        const notion = new _notionhq_client__WEBPACK_IMPORTED_MODULE_2__/* .Client */ .KU({
+            auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`)
+        });
+        createComment(notion, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits);
     } catch (error) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
     }
