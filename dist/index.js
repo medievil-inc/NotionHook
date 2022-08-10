@@ -9549,7 +9549,13 @@ async function createComment(notion, commit) {
             rich_text: [
                 {
                     text: {
-                        content: commit.url
+                        content: commit.url,
+                        link: { 
+                            url: commit.url
+                        }
+                    },
+                    annotations: { 
+                        color: "orange"
                     }
                 }
             ]
