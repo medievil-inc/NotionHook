@@ -1,7 +1,6 @@
-import { Client } from "@notionhq/client";
-
 const core = require("@actions/core");
 const github = require("@actions/github");
+const { Client } = require("@notionhq/client");
 
 async function createComment(notion, commits) {
     commits.forEach((commit) => {
