@@ -36,7 +36,7 @@ async function createComment(notion, commit) {
             ]
         }
     )
-    .then(result => core.notice(JSON.stringify(result)))
+    .then(result => core.notice(JSON.stringify(result, null, 4)))
     .catch(error => core.setFailed(error.message));
 }
 
