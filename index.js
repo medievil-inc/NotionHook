@@ -56,7 +56,8 @@ async function createComment(notion, commits) {
             auth: core.getInput(`notion_secret`) 
         });
         createComment(notion, github.context.payload.commits);
-        core.info(`PAYLOAD ${github.context.payload}`)
+        const payload = JSON.stringify(github.context.payload, undefined, 2)
+        console.log(`The event payload: ${payload}`);
     } catch (error) {
         core.setFailed(error.message);
     }
