@@ -126,3 +126,4 @@ async function createComment(notion, payload, commit) {
         core.setFailed(error.message);
     }
 })();
+
