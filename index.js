@@ -30,20 +30,44 @@ async function createComment(notion, commit) {
             rich_text: [
                 {
                     text: {
-                        content: `💬: ${commit.message}\n`
+                        content: `💬 Commit: `
+                    },
+                    annotations: { 
+                        color: "orange"
                     }
                 },
                 {
                     text: { 
-                        content: `🐣: ${commit.author.username}\n`
+                        content: `${commit.message}\n`
+                    }
+                },
+                {
+                    text: {
+                        content: `🐣 Author: `
+                    },
+                    annotations: { 
+                        color: "orange"
+                    }
+                },
+                {
+                    text: { 
+                        content: `${commit.author.username}\n`
                     },
                     annotations: { 
                         color: "yellow"
                     }
                 },
                 {
+                    text: {
+                        content: `📫 URL: `
+                    },
+                    annotations: { 
+                        color: "orange"
+                    }
+                },
+                {
                     text: { 
-                        content: `📫: ${commit.url}`,
+                        content: `${commit.url}`,
                         link: { 
                             url: commit.url
                         }
