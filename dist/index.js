@@ -9573,7 +9573,7 @@ async function createComment(notion, commit) {
                         content: `${commit.author.username}\n`
                     },
                     annotations: { 
-                        color: "red"
+                        color: "purple"
                     }
                 },
                 {
