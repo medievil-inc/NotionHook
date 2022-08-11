@@ -17,7 +17,7 @@ async function searchPage(notion, commit) {
     return response.results?.[0];
 }
 
-async function createComment(notion, commit) {
+async function createComment(notion, payload, commit) {
     let page = await searchPage(notion, commit);
 
     if (page == null || typeof page == "undefined") { 
@@ -40,7 +40,23 @@ async function createComment(notion, commit) {
                 },
                 {
                     text: { 
-                        content: `${commit.message}\n`
+                        content: `${commit.message.replace(/(\r\n|\n|\r)/gm, " ")}\n`
+                    }
+                },
+                {
+                    text: {
+                        content: `👀 Branch: `
+                    },
+                    annotations: { 
+                        color: "gray"
+                    }
+                },
+                {
+                    text: { 
+                        content: `${payload.ref}\n`
+                    },
+                    annotations: { 
+                        color: "purple"
                     }
                 },
                 {
@@ -92,18 +108,19 @@ async function createComment(notion, commit) {
             auth: core.getInput(`notion_secret`)
         });
 
+        const payload = github.context.payload
+        const commits = payload.commits;
+        
         console.log("------------------------------------------");
-        console.log(JSON.stringify(github.context.payload, null, 4));
+        console.log(JSON.stringify(payload, null, 4));
         console.log("------------------------------------------");
-
-        const commits = github.context.payload.commits;
 
         if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
             commits.forEach((commit) => {
-                createComment(notion, commit);
+                createComment(notion, payload, commit);
             });
         } else { 
-            createComment(notion, github.context.payload.head_commit);
+            createComment(notion, payload, payload.head_commit);
         }
     } catch (error) {
         core.setFailed(error.message);
