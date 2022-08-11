@@ -22,12 +22,6 @@ async function createComment(notion, commit) {
     console.log(JSON.stringify(commit, null, 4));
     console.log("------------------------------------------");
 
-    let template = `
-    Commit 💬: ${commit.message}
-    Author 🐣: ${commit.author.username}
-    URL    📫: ${commit.url}
-    `;
-
     notion.comments.create(
         {
             parent: {
@@ -36,7 +30,17 @@ async function createComment(notion, commit) {
             rich_text: [
                 {
                     text: {
-                        content: template,
+                        content: `💬: ${commit.message}`
+                    }
+                },
+                {
+                    text: { 
+                        content: `🐣: ${commit.author.username}`
+                    }
+                },
+                {
+                    text: { 
+                        content: `📫: ${commit.url}`,
                         link: { 
                             url: commit.url
                         }
