@@ -51,9 +51,10 @@ async function createComment(notion, commit) {
                 },
                 {
                     text: { 
-                        content: `${commit.author.username}\n`
+                        content: `${commit.author.name}\n`
                     },
-                    annotations: { 
+                    annotations: {
+                        code: true, 
                         color: "yellow"
                     }
                 },
