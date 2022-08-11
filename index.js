@@ -3,7 +3,7 @@ import github from "@actions/github"
 import { Client } from "@notionhq/client"
 
 async function searchPage(notion, commit) {
-    const regex = "^(?=(?:.*?[A-Za-z]){6})(?=(?:.*?[0-9]){2})[A-Za-z0-9]{14}$";
+    const regex = "^(?=(?:.*?[A-Za-z]){6})(?=(?:.*?[0-9]){2})[A-Za-z0-9]{32}$";
     const query = commit.message.match(regex)[0];
 
     const response = await notion.search({
