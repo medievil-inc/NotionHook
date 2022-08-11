@@ -3,7 +3,8 @@ import github from "@actions/github"
 import { Client } from "@notionhq/client"
 
 async function searchPage(notion, commit) {
-    const query = commit.message.split(" ")[0];
+    const regex = "^(?=(?:.*?[A-Za-z]))(?=(?:.*?[0-9]))[A-Za-z0-9#,.\-_]{32,}$";
+    const query = commit.match(regex)[0];
 
     const response = await notion.search({
         query: query,
@@ -16,11 +17,11 @@ async function searchPage(notion, commit) {
 }
 
 async function createComment(notion, commit) {
-    let page = await searchPage(notion, commit)
+    let page = await searchPage(notion, commit);
 
-    console.log("------------------------------------------");
-    console.log(JSON.stringify(commit, null, 4));
-    console.log("------------------------------------------");
+    if (page == null || typeof page == "undefined") { 
+        return
+    }
 
     notion.comments.create(
         {
@@ -89,6 +90,10 @@ async function createComment(notion, commit) {
         const notion = new Client({
             auth: core.getInput(`notion_secret`)
         });
+
+        console.log("------------------------------------------");
+        console.log(JSON.stringify(github.context.payload, null, 4));
+        console.log("------------------------------------------");
 
         const commits = github.context.payload.commits;
 

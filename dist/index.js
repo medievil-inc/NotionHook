@@ -9522,7 +9522,8 @@ var __webpack_exports__ = {};
 
 
 async function searchPage(notion, commit) {
-    const query = commit.message.split(" ")[0];
+    const regex = "^(?=(?:.*?[A-Za-z]))(?=(?:.*?[0-9]))[A-Za-z0-9#,.\-_]{32,}$";
+    const query = commit.match(regex)[0];
 
     const response = await notion.search({
         query: query,
@@ -9535,11 +9536,11 @@ async function searchPage(notion, commit) {
 }
 
 async function createComment(notion, commit) {
-    let page = await searchPage(notion, commit)
+    let page = await searchPage(notion, commit);
 
-    console.log("------------------------------------------");
-    console.log(JSON.stringify(commit, null, 4));
-    console.log("------------------------------------------");
+    if (page == null || typeof page == "undefined") { 
+        return
+    }
 
     notion.comments.create(
         {
@@ -9608,6 +9609,10 @@ async function createComment(notion, commit) {
         const notion = new _notionhq_client__WEBPACK_IMPORTED_MODULE_2__/* .Client */ .KU({
             auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`)
         });
+
+        console.log("------------------------------------------");
+        console.log(JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload, null, 4));
+        console.log("------------------------------------------");
 
         const commits = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits;
 
