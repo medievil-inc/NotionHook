@@ -9549,12 +9549,12 @@ async function createComment(notion, commit) {
             rich_text: [
                 {
                     text: {
-                        content: `💬: ${commit.message}`
+                        content: `💬: ${commit.message}\n`
                     }
                 },
                 {
                     text: { 
-                        content: `🐣: ${commit.author.username}`
+                        content: `🐣: ${commit.author.username}\n`
                     }
                 },
                 {
