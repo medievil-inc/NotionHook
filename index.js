@@ -33,7 +33,7 @@ async function createComment(notion, commit) {
                         content: `💬 Commit: `
                     },
                     annotations: { 
-                        color: "orange"
+                        color: "gray"
                     }
                 },
                 {
@@ -46,7 +46,7 @@ async function createComment(notion, commit) {
                         content: `🐣 Author: `
                     },
                     annotations: { 
-                        color: "orange"
+                        color: "gray"
                     }
                 },
                 {
@@ -62,7 +62,7 @@ async function createComment(notion, commit) {
                         content: `📫 URL: `
                     },
                     annotations: { 
-                        color: "orange"
+                        color: "gray"
                     }
                 },
                 {
