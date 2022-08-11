@@ -109,11 +109,3 @@ async function createComment(notion, commit) {
         core.setFailed(error.message);
     }
 })();
-
-
-
-
-
-
-
-
