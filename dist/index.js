@@ -9541,6 +9541,12 @@ async function createComment(notion, commit) {
     console.log(JSON.stringify(commit, null, 4));
     console.log("------------------------------------------");
 
+    let template = `
+    Commit 💬: ${commit.message}
+    Author 🐣: ${commit.author.username}
+    URL    📫: ${commit.url}
+    `;
+
     notion.comments.create(
         {
             parent: {
@@ -9549,7 +9555,7 @@ async function createComment(notion, commit) {
             rich_text: [
                 {
                     text: {
-                        content: commit.url,
+                        content: template,
                         link: { 
                             url: commit.url
                         }
