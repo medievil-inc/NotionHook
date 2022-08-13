@@ -95,14 +95,16 @@ async function createCommentByPr(notion, payload, pullRequest) {
         });
 
         const payload = github.context.payload
-        
+        const pullRequest = payload.pull_request
+        const commits = payload.commits
+
         console.log("------------------------------------------");
         console.log(JSON.stringify(payload, null, 4));
         console.log("------------------------------------------");
 
-        if (pullRequest = payload.pull_request) { 
+        if (typeof pullRequest != "undefined" && pullRequest != null) { 
             createCommentByPr(notion, payload, pullRequest);
-        } else if (commits = payload.commits && commits.length > 0) { 
+        } else if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
             commits.forEach((commit) => {
                 createCommentByCommit(notion, payload, commit);
             });
