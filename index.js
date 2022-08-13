@@ -17,7 +17,7 @@ async function searchPage(notion, commit) {
     return response.results?.[0];
 }
 
-async function createComment(notion, payload, commit) {
+async function createCommentByCommit(notion, payload, commit) {
     let page = await searchPage(notion, commit);
 
     if (page == null || typeof page == "undefined") { 
@@ -102,6 +102,10 @@ async function createComment(notion, payload, commit) {
     .catch(error => core.setFailed(error.message));
 }
 
+async function createCommentByPr(notion, payload, pullRequest) { 
+
+}
+
 (async () => {
     try {
         const notion = new Client({
@@ -109,18 +113,19 @@ async function createComment(notion, payload, commit) {
         });
 
         const payload = github.context.payload
-        const commits = payload.commits;
         
         console.log("------------------------------------------");
         console.log(JSON.stringify(payload, null, 4));
         console.log("------------------------------------------");
 
-        if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
+        if (pullRequest = payload.pull_request) { 
+            createCommentByPr(notion, payload, pullRequest);
+        } else if (commits = payload.commits && commits.length > 0) { 
             commits.forEach((commit) => {
-                createComment(notion, payload, commit);
+                createCommentByCommit(notion, payload, commit);
             });
         } else { 
-            createComment(notion, payload, payload.head_commit);
+            createCommentByCommit(notion, payload, payload.head_commit);
         }
     } catch (error) {
         core.setFailed(error.message);
