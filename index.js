@@ -15,8 +15,8 @@ async function searchPage(notion, commit) {
     return response.results[0];
 }
 
-async function createComment(notion, commit) {
-    let page = await searchPage(notion, commit)
+async function createCommentByCommit(notion, payload, commit) {
+    let page = await searchPage(notion, commit);
 
     console.log("------------------------------------------");
     console.log(JSON.stringify(commit, null, 4));
@@ -84,20 +84,30 @@ async function createComment(notion, commit) {
     .catch(error => core.setFailed(error.message));
 }
 
+async function createCommentByPr(notion, payload, pullRequest) { 
+
+}
+
 (async () => {
     try {
         const notion = new Client({
             auth: core.getInput(`notion_secret`)
         });
 
-        const commits = github.context.payload.commits;
+        const payload = github.context.payload
+        
+        console.log("------------------------------------------");
+        console.log(JSON.stringify(payload, null, 4));
+        console.log("------------------------------------------");
 
-        if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
+        if (pullRequest = payload.pull_request) { 
+            createCommentByPr(notion, payload, pullRequest);
+        } else if (commits = payload.commits && commits.length > 0) { 
             commits.forEach((commit) => {
-                createComment(notion, commit);
+                createCommentByCommit(notion, payload, commit);
             });
         } else { 
-            createComment(notion, github.context.payload.head_commit);
+            createCommentByCommit(notion, payload, payload.head_commit);
         }
     } catch (error) {
         core.setFailed(error.message);

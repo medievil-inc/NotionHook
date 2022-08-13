@@ -9534,8 +9534,8 @@ async function searchPage(notion, commit) {
     return response.results[0];
 }
 
-async function createComment(notion, commit) {
-    let page = await searchPage(notion, commit)
+async function createCommentByCommit(notion, payload, commit) {
+    let page = await searchPage(notion, commit);
 
     console.log("------------------------------------------");
     console.log(JSON.stringify(commit, null, 4));
@@ -9603,20 +9603,30 @@ async function createComment(notion, commit) {
     .catch(error => _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message));
 }
 
+async function createCommentByPr(notion, payload, pullRequest) { 
+
+}
+
 (async () => {
     try {
         const notion = new _notionhq_client__WEBPACK_IMPORTED_MODULE_2__/* .Client */ .KU({
             auth: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput(`notion_secret`)
         });
 
-        const commits = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.commits;
+        const payload = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload
+        
+        console.log("------------------------------------------");
+        console.log(JSON.stringify(payload, null, 4));
+        console.log("------------------------------------------");
 
-        if (typeof commits != "undefined" && commits != null && commits.length != null && commits.length > 0) { 
+        if (pullRequest = payload.pull_request) { 
+            createCommentByPr(notion, payload, pullRequest);
+        } else if (commits = payload.commits && commits.length > 0) { 
             commits.forEach((commit) => {
-                createComment(notion, commit);
+                createCommentByCommit(notion, payload, commit);
             });
         } else { 
-            createComment(notion, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.head_commit);
+            createCommentByCommit(notion, payload, payload.head_commit);
         }
     } catch (error) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
