@@ -3,7 +3,8 @@ import github from "@actions/github"
 import { Client } from "@notionhq/client"
 
 async function searchPage(notion, commit) {
-    const query = commit.message.split(" ")[0];
+    const regex = "(?=(?:.*?[A-Za-z]))(?=(?:.*?[0-9]))[A-Za-z0-9]{32}";
+    const query = commit.message.match(regex)?.[0];
 
     const response = await notion.search({
         query: query,
@@ -12,15 +13,16 @@ async function searchPage(notion, commit) {
             value: "page"
         }
     });
-    return response.results[0];
+
+    return response.results?.[0];
 }
 
 async function createCommentByCommit(notion, payload, commit) {
     let page = await searchPage(notion, commit);
 
-    console.log("------------------------------------------");
-    console.log(JSON.stringify(commit, null, 4));
-    console.log("------------------------------------------");
+    if (page == null || typeof page == "undefined") { 
+        return
+    }
 
     notion.comments.create(
         {
@@ -38,7 +40,23 @@ async function createCommentByCommit(notion, payload, commit) {
                 },
                 {
                     text: { 
-                        content: `${commit.message}\n`
+                        content: `${commit.message.replace(/(\r\n|\n|\r)/gm, " ")}\n`
+                    }
+                },
+                {
+                    text: {
+                        content: `👀 Branch: `
+                    },
+                    annotations: { 
+                        color: "gray"
+                    }
+                },
+                {
+                    text: { 
+                        content: `${payload.ref}\n`
+                    },
+                    annotations: { 
+                        color: "purple"
                     }
                 },
                 {
@@ -115,3 +133,4 @@ async function createCommentByPr(notion, payload, pullRequest) {
         core.setFailed(error.message);
     }
 })();
+
