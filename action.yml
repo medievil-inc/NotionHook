@@ -1,12 +1,19 @@
-name: 'notion-action'
-description: 'Sync your commits to Notion'
+name: "notion-action"
+description: "Sync your commits to Notion"
 branding:
-  icon: 'check-circle'  
-  color: 'white'
+  icon: "check-circle"
+  color: "white"
 inputs:
   notion_secret:
-    description: 'Notion Secret retrieved from My Integrations on notion.so/my-integrations'
+    description: "Notion Secret retrieved from My Integrations on notion.so/my-integrations"
     required: true
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "composite"
+  steps:
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: "2.6"
+    - name: Run notion hook
+      run: ruby app/main.rb
+      shell: bash
