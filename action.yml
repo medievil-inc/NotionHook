@@ -22,9 +22,13 @@ runs:
   using: "composite"
   steps:
     - name: Set up Ruby 3.2.1
+      env:
+        BUNDLE_GEMFILE: ${{ github.workspace }}/.gemfile
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: "3.2.1"
         bundler-cache: true
-    - run: ruby ./app/main.rb
+    - run: bundle exec ruby ./app/main.rb
+      env:
+        BUNDLE_GEMFILE: ${{ github.workspace }}/.gemfile
       shell: bash  
