@@ -12,4 +12,5 @@ jobs:
         id: notion
         uses: medievil-inc/notion-hook@1.1
         with:
-          notion_secret: ${{ secrets.NOTION_SECRET }}
+          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
