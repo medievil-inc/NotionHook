@@ -26,7 +26,5 @@ runs:
       with:
         ruby-version: "3.2.1"
         bundler-cache: true
-    - run: bundle install
-      shell: bash
     - run: bundle exec ruby ./app/main.rb
       shell: bash  
