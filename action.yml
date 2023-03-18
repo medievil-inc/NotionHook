@@ -27,7 +27,7 @@ runs:
         ruby-version: "3.2.1"
     - name: Run notion hook
       env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          PERSONAL_ACCESS_TOKEN: ${{ PERSONAL_ACCESS_TOKEN }}
+          NOTION_SECRET: ${{ NOTION_SECRET }}
       run: ruby app/main.rb
       shell: bash
