@@ -21,17 +21,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: DEBUG __
-      run: ls
-      shell: bash
+    - uses: actions/checkout@v3
     - name: Set up Ruby 3.2.1
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: "3.2.1"
         bundler-cache: true
-    - name: DEBUG __
-      run: ls
-      shell: bash
     - run: bundle exec ruby ./app/main.rb
       env:
         BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile
