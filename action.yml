@@ -29,5 +29,10 @@ runs:
       with:
         ruby-version: "3.2.1"
         bundler-cache: true
+    - name: DEBUG __
+      run: ls
+      shell: bash
     - run: bundle exec ruby ./app/main.rb
+      env:
+        BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile
       shell: bash
