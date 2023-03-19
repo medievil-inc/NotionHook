@@ -6,8 +6,6 @@ on:
 jobs:
   notion_job:
     runs-on: macos-latest
-    env:
-        BUNDLE_GEMFILE: ./Gemfile
     name: Sync your commits to Notion job
     steps:
       - name: Send commits info step

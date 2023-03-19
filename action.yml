@@ -21,6 +21,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: DEBUG __
+      run: ls
+      shell: bash
     - name: Set up Ruby 3.2.1
       uses: ruby/setup-ruby@v1
       with:
