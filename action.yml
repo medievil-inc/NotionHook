@@ -1,12 +1,30 @@
-name: 'notion-action'
-description: 'Sync your commits to Notion'
+name: "notion-action"
+description: |
+  This GitHub Action allows you to seamlessly sync your code commits with your Notion database.
+  Keep your development progress organized and in sync with this easy-to-use integration.
 branding:
-  icon: 'check-circle'  
-  color: 'white'
+  icon: "check-circle"
+  color: "white"
 inputs:
-  notion_secret:
-    description: 'Notion Secret retrieved from My Integrations on notion.so/my-integrations'
+  NOTION_SECRET:
+    description: |
+      The action requires a Notion Secret to access your account. 
+      Please provide a valid Notion Secret to proceed with the action.
+      https://www.notion.so/my-integrations
+    required: true
+  PERSONAL_ACCESS_TOKEN:
+    description: |
+      The requested operation requires authentication using a personal access token.
+      Please provide a valid token to proceed.
+      https://docs.github.com/ru/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
     required: true
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "composite"
+  steps:
+    - name: Set up Ruby 3.2.1
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: "3.2.1"
+        bundler-cache: true
+    - run: bundle exec ruby ./app/main.rb
+      shell: bash
