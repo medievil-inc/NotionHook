@@ -8,7 +8,7 @@ jobs:
     runs-on: macos-latest
     name: Synchronize Commits with Notion
     steps:
-      - name: Send commits info step
+      - name: Send Commit Information to Notion
         id: notion
         uses: medievil-inc/notion-hook@1.1
         with:
