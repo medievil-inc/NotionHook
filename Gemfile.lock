@@ -18,9 +18,10 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-darwin-19
 
 DEPENDENCIES
   octokit (~> 5.0)
 
 BUNDLED WITH
-   2.4.7
+   2.4.6
