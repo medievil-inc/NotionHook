@@ -6,7 +6,7 @@ on:
 jobs:
   notion_job:
     runs-on: macos-latest
-    name: Sync your commits to Notion job
+    name: Synchronize Commits with Notion
     steps:
       - name: Send commits info step
         id: notion
