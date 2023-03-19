@@ -30,4 +30,6 @@ runs:
     - run: bundle exec ruby ./app/main.rb
       env:
         BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile
+        NOTION_SECRET: ${{ inputs.NOTION_SECRET }}
+        PERSONAL_ACCESS_TOKEN: ${{ inputs.PERSONAL_ACCESS_TOKEN }}
       shell: bash
