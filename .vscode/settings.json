@@ -1,0 +1,7 @@
+{
+  "solargraph.commandPath": "bin/solargraph",
+  "solargraph.formatting": true,
+  "editor.formatOnSave": true,
+  "solargraph.diagnostics": true,
+  "ruby.rubocop.configFilePath": "./.rubocop.yml"
+}
