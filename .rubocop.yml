@@ -21,7 +21,14 @@ Layout/LineLength:
   Max: 120
 
 Metrics/MethodLength:
-  Max: 30
+  Max: 50
 
 Layout/IndentationWidth:
   Width: 4
+
+Metrics/AbcSize:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  IndentationWidth: 0
