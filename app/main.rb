@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'notion-client'
+require 'notion-ruby-client'
 require 'octokit'
 
 require_relative './utils/github_event_processor'
@@ -15,7 +15,7 @@ require_relative './utils/notion_helpers'
 begin
     notion_secret = ENV.fetch('NOTION_SECRET', nil)
 
-    notion = Notion::Client.new(auth: notion_secret)
+    notion = Notion::Client.new(token: notion_secret)
 
     payload = GitHubEventProcessor.load_payload
 
@@ -45,7 +45,7 @@ async def create_comment_by_commit(notion, payload, commit)
 
     return if page.nil? || page == 'undefined'
 
-    notion.comments.create(
+    notion.create_comment(
         {
             parent: {
                 page_id: page.id
