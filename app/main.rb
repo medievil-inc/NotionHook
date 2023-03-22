@@ -38,9 +38,7 @@ rescue StandardError => e
     exit 1
 end
 
-private
-
-async def create_comment_by_commit(notion, payload, commit)
+def create_comment_by_commit(notion, payload, commit)
     page = NotionHelpers.search_page(notion, commit)
 
     return if page.nil? || page == 'undefined'
@@ -73,8 +71,12 @@ async def create_comment_by_commit(notion, payload, commit)
             ]
         }
     )
-    .then(result => core.notice(JSON.stringify(result, null, 4)))
-    .catch(error => core.set_failed(error.message))
+    .then do |result|
+        JSON.pretty_generate(result)
+    .catch do |e|
+        puts e.message
+        exit 1
+    end
 end
 
 def create_comment_by_pr(notion, payload, pull_request)
