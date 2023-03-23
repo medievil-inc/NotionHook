@@ -16,23 +16,23 @@ module NotionHelpers
             },
             rich_text: [
                 create_comment_title(content: '💬 Commit: '),
-                create_comment_description(content: "#{commit.message.gsub(/(\r\n|\n|\r)/, ' ')}\n"),
+                create_comment_description(content: "#{commit['message'].gsub(/(\r\n|\n|\r)/, ' ')}\n"),
                 create_comment_title(content: '👀 Branch: '),
                 create_comment_description(
-                    content: "#{payload.ref}\n",
+                    content: "#{payload['ref']}\n",
                     color: 'purple'
                 ),
                 create_comment_title(content: '🐣 Author: '),
                 create_comment_description(
-                    content: "#{commit.author.name}\n",
+                    content: "#{commit['author']['name']}\n",
                     color: 'yellow',
                     code: true
                 ),
                 create_comment_title(content: '📫 URL: '),
                 create_comment_description(
-                    content: commit.url.to_s,
+                    content: commit['url'],
                     color: 'blue',
-                    url: commit.url
+                    url: commit['url']
                 )
             ]
         }
@@ -77,7 +77,7 @@ module NotionHelpers
 
     def search_page(notion, commit)
         regex = '(?=(?:.*?[A-Za-z]))(?=(?:.*?[0-9]))[A-Za-z0-9]{32}'
-        query = commit.message.match(regex)&.[](0)
+        query = commit['message'].match(regex)&.[](0)
 
         response = notion.search(
             query:,
