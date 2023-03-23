@@ -8,6 +8,11 @@ module NotionHelpers
     def create_comment_by_commit(notion, payload, commit)
         page = search_page(notion, commit)
 
+        puts '------------------------------------------'
+        puts JSON.pretty_generate(commit)
+        puts '------------------------------------------'
+        puts JSON.pretty_generate(page)
+        puts '------------------------------------------'
         return if page.nil?
 
         options = {
