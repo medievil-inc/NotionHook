@@ -92,6 +92,12 @@ module NotionHelpers
             }
         )
 
+        puts '------------------------------------------'
+        puts JSON.pretty_generate(query)
+        puts '------------------------------------------'
+        puts JSON.pretty_generate(response)
+        puts '------------------------------------------'
+
         response.results&.[](0)
     end
 end
